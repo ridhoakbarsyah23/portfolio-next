@@ -16,7 +16,7 @@ export default function ContactSection() {
   return (
     <motion.section id="contact" className="text-center py-5" initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} viewport={{ once: true }}>
       <Container style={{ maxWidth: "600px" }}>
-        <h2 className="fw-bold mb-3 text-primary fs-2">Hubungi Saya</h2>
+        <h2 className="fw-bold mb-3 text-primary fs-2">Hire Me</h2>
         <p className="fs-6">Kirim pesan di bawah jika ingin bekerja sama 👇</p>
 
         {showAlert && (

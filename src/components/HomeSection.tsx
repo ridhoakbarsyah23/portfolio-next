@@ -3,6 +3,7 @@
 import { Container, Button } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { FaDownload, FaArrowRight } from "react-icons/fa";
+import Image from "next/image";
 
 interface Props {
   darkMode: boolean;
@@ -17,6 +18,8 @@ export default function HomeSection({ darkMode }: Props) {
         minHeight: "100vh",
         background: darkMode ? "linear-gradient(135deg, #0d1117 0%, #161b22 100%)" : "linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%)",
         transition: "background 0.5s ease",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
       <Container>
@@ -31,21 +34,34 @@ export default function HomeSection({ darkMode }: Props) {
             maxWidth: "550px",
           }}
         >
-          <motion.img
-            src="/Background-Merah.jpg"
-            alt="Profile"
-            className="profile-img mb-4 shadow-lg"
-            style={{
-              width: "180px",
-              height: "180px",
-              borderRadius: "50%",
-              objectFit: "cover",
-              border: darkMode ? "4px solid #333" : "4px solid #fff",
-              boxShadow: darkMode ? "0 0 25px rgba(255,255,255,0.1)" : "0 0 25px rgba(0,0,0,0.1)",
-            }}
+          {/* Foto bulat */}
+          <motion.div
+            className="photo-wrapper mx-auto mb-4 position-relative"
             whileHover={{ scale: 1.05, rotate: 1 }}
             transition={{ type: "spring", stiffness: 200 }}
-          />
+            style={{
+              width: "200px",
+              height: "200px",
+              borderRadius: "50%",
+              background: darkMode ? "linear-gradient(135deg, #00bcd4 0%, #2196f3 100%)" : "linear-gradient(135deg, #007bff 0%, #00c6ff 100%)",
+              padding: "5px",
+              boxShadow: darkMode ? "0 0 30px rgba(0, 188, 212, 0.5)" : "0 0 30px rgba(0, 123, 255, 0.5)",
+              animation: "pulseGlow 3s infinite alternate",
+            }}
+          >
+            <Image
+              src="/avatar-profile.png"
+              alt="Profile"
+              width={200}
+              height={200}
+              style={{
+                objectFit: "cover",
+                borderRadius: "50%",
+                border: darkMode ? "3px solid #0d1117" : "3px solid #fff",
+              }}
+              priority
+            />
+          </motion.div>
 
           <motion.h1 className="fw-bold mb-2 display-6 text-primary" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
             Ridho Akbarsyah Ramadhan
@@ -61,17 +77,13 @@ export default function HomeSection({ darkMode }: Props) {
               <FaArrowRight />
             </Button>
 
-            <a
-              href="/CV_Ridho_Akbarsyah_Ramadhan.pdf"
-              download
-              className={`btn ${darkMode ? "btn-outline-light" : "btn-outline-primary"} btn-lg px-4 py-2 rounded-pill d-flex align-items-center justify-content-center gap-2 shadow-sm cv-btn`}
-            >
+            <a href="/CV_Ridho_Akbarsyah_Ramadhan.pdf" download className={`btn ${darkMode ? "btn-outline-light" : "btn-outline-primary"} btn-lg px-4 py-2 rounded-pill d-flex align-items-center justify-content-center gap-2 shadow-sm`}>
               <FaDownload /> Unduh CV
             </a>
           </motion.div>
         </motion.div>
 
-        {/* Elemen Dekoratif */}
+        {/* Scroll indicator */}
         <motion.div
           className="position-absolute"
           style={{
@@ -90,6 +102,18 @@ export default function HomeSection({ darkMode }: Props) {
           </motion.span>
         </motion.div>
       </Container>
+
+      {/* Animasi Glow */}
+      <style jsx global>{`
+        @keyframes pulseGlow {
+          0% {
+            box-shadow: 0 0 25px rgba(0, 123, 255, 0.4), 0 0 40px rgba(0, 123, 255, 0.2);
+          }
+          100% {
+            box-shadow: 0 0 50px rgba(0, 123, 255, 0.8), 0 0 80px rgba(0, 123, 255, 0.4);
+          }
+        }
+      `}</style>
     </section>
   );
 }

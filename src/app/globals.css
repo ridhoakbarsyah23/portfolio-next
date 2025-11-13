@@ -1,0 +1,121 @@
+body {
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  letter-spacing: 0.2px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  line-height: 1.3;
+}
+
+p {
+  font-weight: 400;
+}
+
+.navbar,
+.btn,
+.form-label {
+  font-weight: 500;
+}
+
+section {
+  padding: 60px 0;
+  scroll-margin-top: 90px;
+}
+
+/* Navbar */
+.navbar {
+  transition: background-color 0.4s ease;
+}
+
+.nav-link {
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-link:hover {
+  transform: scale(1.05);
+  color: #0d6efd !important;
+}
+
+/* Profile */
+.profile-img {
+  border-radius: 50%;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.profile-img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.profile-container {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Project Cards */
+.project-card {
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.project-card:hover {
+  transform: translateY(-6px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-content {
+    padding-top: 130px;
+  }
+  .project-card {
+    max-width: 100%;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.cv-btn {
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.cv-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(13, 110, 253, 0.25);
+}
+
+/* Tombol Unduh CV pada dark mode */
+[data-bs-theme="dark"] .cv-btn:hover {
+  box-shadow: 0 6px 18px rgba(255, 255, 255, 0.15);
+}
+
+footer {
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+  h2 {
+    font-size: 1.4rem;
+  }
+  p {
+    font-size: 0.95rem;
+  }
+}

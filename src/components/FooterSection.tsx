@@ -23,7 +23,7 @@ export default function FooterSection({ darkMode }: Props) {
           <a href="https://github.com/ridhoakbarsyah23" target="_blank" rel="noopener noreferrer" className={`text-decoration-none ${darkMode ? "text-light" : "text-dark"}`} style={{ fontSize: 22 }}>
             <FaGithub />
           </a>
-          <a href="https://www.instagram.com/ridhoakbarsyah_?igsh=MWd0aTlhZmZqZjR0eg==" target="_blank" rel="noopener noreferrer" className={`text-decoration-none ${darkMode ? "text-light" : "text-dark"}`} style={{ fontSize: 22 }}>
+          <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" className={`text-decoration-none ${darkMode ? "text-light" : "text-dark"}`} style={{ fontSize: 22 }}>
             <FaInstagram />
           </a>
         </div>

@@ -68,7 +68,7 @@ export default function HomeSection({ darkMode }: Props) {
           </motion.h1>
 
           <motion.p className="mb-4 fs-5 text-secondary" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
-            Frontend Developer &nbsp;|&nbsp; Full Stack Developer
+            Frontend Developer &nbsp;|&nbsp; Cilacap, Central Java
           </motion.p>
 
           <motion.div className="d-flex flex-column flex-sm-row justify-content-center gap-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}>

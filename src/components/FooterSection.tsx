@@ -1,7 +1,7 @@
 "use client";
 
 import { Container } from "react-bootstrap";
-import { FaLinkedin, FaGithub, FaInstagram } from "react-icons/fa";
+import { FaLinkedin, FaGithub} from "react-icons/fa";
 
 interface Props {
   darkMode: boolean;

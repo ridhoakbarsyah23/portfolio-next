@@ -219,3 +219,45 @@ footer p {
 [data-bs-theme="dark"] ::-webkit-scrollbar-track {
   background: #1c1c1c;
 }
+
+/* ============================
+   TIMELINE - RESPONSIVE & PREMIUM STYLE
+   ============================ */
+
+@media (max-width: 992px) {
+  /* Semua card ke kiri dan full width */
+  .timeline-card {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+
+  /* Garis timeline pindah ke kiri */
+  .timeline-line {
+    left: 0 !important;
+    transform: none !important;
+  }
+
+  /* Titik glow sejajar dengan garis (pas berada di tengah garis 3px) */
+  .timeline-dot {
+    left: -7.5px !important; /* titik 15px / 2 = 7.5 */
+    transform: none !important;
+  }
+
+  /* Container tanpa padding supaya benar-benar menempel kiri */
+  .timeline-container {
+    padding-left: 0 !important;
+  }
+
+  /* Semua item rata kiri */
+  .d-flex.justify-content-start,
+  .d-flex.justify-content-end {
+    justify-content: flex-start !important;
+  }
+}
+
+@media (max-width: 576px) {
+  /* Jarak antar item */
+  .timeline-card {
+    padding: 18px !important;
+  }
+}

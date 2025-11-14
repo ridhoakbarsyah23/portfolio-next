@@ -11,17 +11,17 @@ export default function ProjectsSection({ darkMode }: Props) {
   const projects = [
     {
       title: "SIMRS",
-      desc: "Sistem Informasi Manajemen Rumah Sakit untuk mendukung operasional rumah sakit secara online.",
+      desc: "A Hospital Management Information System designed to support hospital operations online.",
       image: "/projects/simrs.jpg",
     },
     {
       title: "EMR",
-      desc: "Sistem Rekam Medis Elektronik untuk pencatatan dan pengelolaan data medis pasien secara digital.",
+      desc: "An Electronic Medical Record system for digital recording and management of patient medical data.",
       image: "/projects/emr.jpg",
     },
     {
       title: "SISAPPRA Satpol PP DKI Jakarta",
-      desc: "Platform monitoring dan pelaporan kegiatan operasional Satpol PP Provinsi DKI Jakarta.",
+      desc: "A monitoring and reporting platform for the operational activities of Satpol PP of DKI Jakarta Province.",
       image: "/projects/sisappra.png",
     },
   ];

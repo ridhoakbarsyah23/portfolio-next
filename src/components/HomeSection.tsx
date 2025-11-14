@@ -73,12 +73,12 @@ export default function HomeSection({ darkMode }: Props) {
 
           <motion.div className="d-flex flex-column flex-sm-row justify-content-center gap-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}>
             <Button variant="primary" href="#projects" size="lg" className="px-4 py-2 rounded-pill d-flex align-items-center justify-content-center gap-2 shadow-sm">
-              🚀 Lihat Project
+              🚀 See Projects
               <FaArrowRight />
             </Button>
 
             <a href="/CV_Ridho_Akbarsyah_Ramadhan.pdf" download className={`btn ${darkMode ? "btn-outline-light" : "btn-outline-primary"} btn-lg px-4 py-2 rounded-pill d-flex align-items-center justify-content-center gap-2 shadow-sm`}>
-              <FaDownload /> Unduh CV
+              <FaDownload /> Download CV
             </a>
           </motion.div>
         </motion.div>
@@ -98,7 +98,7 @@ export default function HomeSection({ darkMode }: Props) {
           transition={{ delay: 1.2 }}
         >
           <motion.span animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 1.8 }}>
-            🔽 Scroll ke bawah
+            🔽 Scroll down
           </motion.span>
         </motion.div>
       </Container>

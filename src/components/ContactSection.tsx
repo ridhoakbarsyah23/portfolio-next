@@ -17,29 +17,29 @@ export default function ContactSection() {
     <motion.section id="contact" className="text-center py-5" initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} viewport={{ once: true }}>
       <Container style={{ maxWidth: "600px" }}>
         <h2 className="fw-bold mb-3 text-primary fs-2">Hire Me</h2>
-        <p className="fs-6">Kirim pesan di bawah jika ingin bekerja sama 👇</p>
+        <p className="fs-6">Send a message below if you’re interested in working together 👇</p>
 
         {showAlert && (
           <Alert variant="success" className="mt-3">
-            ✅ Pesan berhasil dikirim! Terima kasih 🙌
+            ✅ Your message has been sent! Thank you 🙌
           </Alert>
         )}
 
         <Form className="text-start mt-4" onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
-            <Form.Label>Nama</Form.Label>
-            <Form.Control type="text" placeholder="Masukkan nama" required />
+            <Form.Label>Name</Form.Label>
+            <Form.Control type="text" placeholder="Enter your name" required />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Email</Form.Label>
-            <Form.Control type="email" placeholder="Masukkan email" required />
+            <Form.Control type="email" placeholder="Enter your email" required />
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>Pesan</Form.Label>
-            <Form.Control as="textarea" rows={3} placeholder="Tulis pesan kamu..." required />
+            <Form.Label>Message</Form.Label>
+            <Form.Control as="textarea" rows={3} placeholder="Write your message..." required />
           </Form.Group>
           <Button variant="primary" type="submit" className="w-100 rounded-pill fw-semibold">
-            Kirim Pesan
+            Send Message
           </Button>
         </Form>
       </Container>

@@ -4,15 +4,12 @@ Portofolio pribadi yang dibangun menggunakan Next.js — situs untuk menampilkan
 
 ## 📋 Daftar Isi
 
-- [Tentang Proyek](#tentang-proyek)
-- [Fitur Utama](#fitur-utama)
-- [Teknologi](#teknologi)
-- [Instalasi & Pengembangan](#instalasi--pengembangan)
-- [Build & Deploy](#build--deploy)
-- [Struktur Direktori](#struktur-direktori)
-- [Kontribusi](#kontribusi)
-- [Lisensi](#lisensi)
-- [Kontak](#kontak)
+- [Home]
+- [About]
+- [Experience]
+- [Skills]
+- [Projects]
+- [Contacts]
 
 ## Tentang Proyek
 
@@ -37,7 +34,7 @@ Situs portofolio ini dibuat untuk:
 
 - Next.js (React framework)
 - React (komponen UI)
-- Tailwind CSS atau styled-components (jika Anda menggunakan salah satu)
+- Bootstrap
 - Vercel/Netlify untuk deploy (atau platform Anda sendiri)
 - (Tambahkan yang lainnya: misalnya Sanity/Contentful, Framer Motion, TypeScript, dll.)
 

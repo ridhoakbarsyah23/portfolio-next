@@ -15,8 +15,17 @@ export default function NavbarComponent({ darkMode, setDarkMode, activeLink }: P
   return (
     <Navbar expand="lg" expanded={expanded} onToggle={(val) => setExpanded(val)} fixed="top" className={darkMode ? "navbar-dark bg-dark shadow-sm" : "navbar-light bg-white shadow-sm"}>
       <Container>
-        <Navbar.Brand href="#home" className="fw-bold fs-3">
-          🌐 Ridho
+        <Navbar.Brand href="#home" className="d-flex align-items-center gap-2">
+          <span style={{ fontSize: "1.7rem" }}>🌐</span>
+          <span
+            style={{
+              fontWeight: "800",
+              fontSize: "1.5rem",
+              letterSpacing: "1px",
+            }}
+          >
+            Ridho
+          </span>
         </Navbar.Brand>
 
         <Navbar.Toggle onClick={() => setExpanded(!expanded)} />

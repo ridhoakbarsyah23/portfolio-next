@@ -50,8 +50,8 @@ export default function HomeSection({ darkMode }: Props) {
             }}
           >
             <Image
-              src="/avatar-profile.png"
-              alt="Profile"
+              src="/img-myself/Background-Merah.jpg"
+              alt="My Profile"
               width={200}
               height={200}
               style={{

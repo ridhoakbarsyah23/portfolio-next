@@ -35,17 +35,8 @@ export default function ExperienceSection({ darkMode }: Props) {
   ];
 
   return (
-    <section id="experience" className={`py-5 position-relative ${darkMode ? "bg-dark text-light" : "bg-light text-dark"}`}>
-      {/* Background Soft Glow */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: "radial-gradient(circle at center, rgba(0, 123, 255, 0.12), transparent 70%)",
-          pointerEvents: "none",
-        }}
-      />
-
+    <section id="experience" className={`py-5 ${darkMode ? "bg-dark text-light" : "bg-light text-dark"}`} style={{ overflow: "hidden" }}>
+      {" "}
       <Container>
         <motion.h2
           className="text-center fw-bold mb-5"
@@ -54,84 +45,68 @@ export default function ExperienceSection({ darkMode }: Props) {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           style={{
-            color: "#0d6efd",
+            background: "linear-gradient(90deg, #0d6efd, #6610f2, #d63384)",
+            WebkitBackgroundClip: "text",
+            color: "transparent",
+            fontSize: "2.5rem",
             letterSpacing: "1px",
-            fontSize: "2.4rem",
           }}
         >
           Experience
         </motion.h2>
-
-        <div className="timeline-container position-relative mx-auto" style={{ maxWidth: "900px" }}>
-          {/* Vertical Neon Line */}
-          <motion.div
-            className="timeline-line"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-            style={{
-              position: "absolute",
-              left: "50%",
-              top: 0,
-              bottom: 0,
-              width: "3px",
-              background: "linear-gradient(to bottom, #0d6efd, #6610f2, #d63384)",
-              transform: "translateX(-50%)",
-              borderRadius: "10px",
-              boxShadow: "0 0 18px rgba(13,110,253,0.6)",
-            }}
-          />
-
+        <div
+          className="mx-auto"
+          style={{
+            maxWidth: "950px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "2rem",
+          }}
+        >
           {timeline.map((item, index) => {
-            const side = index % 2 === 0 ? "start" : "end";
+            const isLeft = index % 2 === 0;
 
             return (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, x: side === "start" ? -90 : 90 }}
+                initial={{ opacity: 0, x: isLeft ? -70 : 70 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.7 }}
                 viewport={{ once: true }}
-                className={`d-flex justify-content-${side} mb-5 position-relative`}
+                transition={{ duration: 0.6 }}
+                style={{
+                  display: "flex",
+                  justifyContent: isLeft ? "flex-start" : "flex-end",
+                  width: "100%",
+                }}
+                className="timeline-item"
               >
-                {/* Dot Glow */}
-                <div
-                  className="timeline-dot"
-                  style={{
-                    position: "absolute",
-                    left: "50%",
-                    top: "-22px",
-                    width: "18px",
-                    height: "18px",
-                    background: "linear-gradient(45deg, #0d6efd, #6610f2)",
-                    borderRadius: "50%",
-                    transform: "translateX(-50%)",
-                    zIndex: 10,
-                    boxShadow: "0 0 15px rgba(13,110,253,0.8), 0 0 25px rgba(102,16,242,0.5)",
-                  }}
-                />
-
-                {/* Premium Card */}
                 <motion.div
-                  whileHover={{ scale: 1.04 }}
-                  transition={{ type: "spring", stiffness: 120 }}
-                  className="timeline-card rounded-4 shadow-lg p-4"
+                  whileHover={{ scale: 1.04, y: -2 }}
+                  transition={{ type: "spring", stiffness: 140 }}
                   style={{
-                    width: "45%",
-                    backdropFilter: "blur(16px)",
-                    background: darkMode ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.45)",
-                    border: "1px solid rgba(255,255,255,0.18)",
-                    boxShadow: "0 6px 18px rgba(0,0,0,0.15), inset 0 0 15px rgba(255,255,255,0.08)",
-                    transition: "0.3s",
+                    width: "100%",
+                    maxWidth: "450px",
+                    borderRadius: "18px",
+                    backdropFilter: "blur(14px)",
+                    background: darkMode ? "rgba(255,255,255,0.07)" : "rgba(255,255,255,0.75)",
+                    border: darkMode ? "1px solid rgba(255,255,255,0.12)" : "1px solid rgba(0,0,0,0.1)",
+                    boxShadow: "0 8px 22px rgba(0,0,0,0.15), inset 0 0 12px rgba(255,255,255,0.04)",
+                    padding: "22px",
                   }}
                 >
                   <h5 className="fw-bold mb-1">{item.title}</h5>
                   <p className="text-primary fw-semibold mb-0">{item.company}</p>
                   <small className="opacity-75">{item.year}</small>
 
-                  <ul className="mt-3 mb-0">
+                  <ul className="mt-3 mb-0" style={{ paddingLeft: "18px" }}>
                     {item.desc.map((d, i) => (
-                      <li key={i} style={{ marginBottom: "6px" }}>
+                      <li
+                        key={i}
+                        style={{
+                          marginBottom: "6px",
+                          listStyle: "disc",
+                        }}
+                      >
                         {d}
                       </li>
                     ))}
@@ -142,6 +117,16 @@ export default function ExperienceSection({ darkMode }: Props) {
           })}
         </div>
       </Container>
+      {/* MOBILE FIX (1 kolom rapi) */}
+      <style>
+        {`
+      @media (max-width: 768px) {
+        .timeline-item {
+          justify-content: center !important;
+        }
+      }
+    `}
+      </style>
     </section>
   );
 }

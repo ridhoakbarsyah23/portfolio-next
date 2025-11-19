@@ -34,7 +34,6 @@ export default function HomeSection({ darkMode }: Props) {
             maxWidth: "550px",
           }}
         >
-          {/* Foto bulat */}
           <motion.div
             className="photo-wrapper mx-auto mb-4 position-relative"
             whileHover={{ scale: 1.05, rotate: 1 }}
@@ -68,7 +67,7 @@ export default function HomeSection({ darkMode }: Props) {
           </motion.h1>
 
           <motion.p className="mb-4 fs-5 text-secondary" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
-            Frontend Developer &nbsp;|&nbsp; Cilacap, Central Java
+            Frontend Developer | Cilacap, Central Java
           </motion.p>
 
           <motion.div className="d-flex flex-column flex-sm-row justify-content-center gap-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}>
@@ -82,38 +81,7 @@ export default function HomeSection({ darkMode }: Props) {
             </a>
           </motion.div>
         </motion.div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          className="position-absolute"
-          style={{
-            bottom: "30px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            opacity: 0.7,
-            fontSize: "0.9rem",
-          }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-        >
-          <motion.span animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 1.8 }}>
-            🔽 Scroll down
-          </motion.span>
-        </motion.div>
       </Container>
-
-      {/* Animasi Glow */}
-      <style jsx global>{`
-        @keyframes pulseGlow {
-          0% {
-            box-shadow: 0 0 25px rgba(0, 123, 255, 0.4), 0 0 40px rgba(0, 123, 255, 0.2);
-          }
-          100% {
-            box-shadow: 0 0 50px rgba(0, 123, 255, 0.8), 0 0 80px rgba(0, 123, 255, 0.4);
-          }
-        }
-      `}</style>
     </section>
   );
 }

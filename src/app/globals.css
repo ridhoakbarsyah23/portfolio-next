@@ -261,3 +261,25 @@ footer p {
     padding: 18px !important;
   }
 }
+
+/* Mobile Fix Timeline */
+@media (max-width: 768px) {
+  .timeline-container {
+    padding-left: 20px !important;
+  }
+
+  .timeline-line {
+    left: 12px !important;
+    transform: none !important;
+  }
+
+  .timeline-dot {
+    left: 12px !important;
+    transform: none !important;
+  }
+
+  .timeline-card {
+    width: 100% !important;
+    margin-left: 25px !important;
+  }
+}

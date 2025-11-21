@@ -1,13 +1,7 @@
 import Image from "next/image";
 import { articles } from "@/data/articles";
 
-interface Props {
-  params: {
-    id: string;
-  };
-}
-
-export default function ArticleDetail({ params }: Props) {
+export default function ArticleDetail({ params }: { params: { id: string } }) {
   const article = articles.find((item) => item.id.toString() === params.id);
 
   if (!article) {

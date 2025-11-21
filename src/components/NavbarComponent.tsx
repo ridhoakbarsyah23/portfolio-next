@@ -32,7 +32,7 @@ export default function NavbarComponent({ darkMode, setDarkMode, activeLink }: P
 
         <Navbar.Collapse>
           <Nav className="ms-auto align-items-center gap-3">
-            {["home", "about", "experience", "skills", "projects", "contact"].map((id) => (
+            {["home", "about", "experience", "skills", "projects", "contact", "blog"].map((id) => (
               <Nav.Link
                 key={id}
                 href={`#${id}`}

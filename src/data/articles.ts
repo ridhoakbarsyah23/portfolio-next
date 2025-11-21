@@ -30,4 +30,34 @@ export const articles = [
       Materi lengkap UI/UX untuk developer.
     `,
   },
+  {
+    id: 4,
+    title: "Mengenal TypeScript: Panduan untuk Pemula",
+    date: "10 Nov 2025",
+    excerpt: "Pelajari dasar-dasar TypeScript dan manfaatnya dalam pengembangan aplikasi.",
+    image: "/images-blog/blog-4.jpg",
+    content: `
+      Konten lengkap tentang TypeScript.
+    `,
+  },
+  {
+    id: 5,
+    title: "Optimasi Performa Aplikasi Next.js",
+    date: "05 Nov 2025",
+    excerpt: "Tips dan trik untuk meningkatkan performa aplikasi Next.js Anda.",
+    image: "/images-blog/blog-5.jpg",
+    content: `
+      Konten lengkap tentang optimasi performa.
+    `,
+  },
+  {
+    id: 6,
+    title: "Membangun API dengan Next.js dan Node.js",
+    date: "01 Nov 2025",
+    excerpt: "Langkah-langkah membuat API menggunakan Next.js dan Node.js.",
+    image: "/images-blog/blog-6.jpg",
+    content: `
+      Konten lengkap tentang pembuatan API.
+    `,
+  },
 ];

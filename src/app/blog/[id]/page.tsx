@@ -7,7 +7,7 @@ export default function ArticleDetail({ params }: { params: { id: string } }) {
   if (!article) {
     return (
       <div className="container py-5 text-center">
-        <h2>Artikel tidak ditemukan.</h2>
+        <h2 className="fw-bold">Artikel tidak ditemukan.</h2>
       </div>
     );
   }

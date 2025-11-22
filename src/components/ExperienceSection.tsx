@@ -10,6 +10,12 @@ interface Props {
 export default function ExperienceSection({ darkMode }: Props) {
   const timeline = [
     {
+      year: "Now",
+      title: "Tenaga Ahli Online Data System (ODS) Deputi Kelembagaan dan Digitalisasi Koperasi",
+      company: "Kementerian Koperasi Republik Indonesia",
+      desc: ["Handle the Online Data System project for the Deputy of Institutional Development and Cooperative Digitalization at the Ministry of Cooperatives of the Republic of Indonesia."],
+    },
+    {
       year: "2025",
       title: "Programmer",
       company: "PT Data Kreatif",
@@ -36,7 +42,6 @@ export default function ExperienceSection({ darkMode }: Props) {
 
   return (
     <section id="experience" className={`py-5 ${darkMode ? "bg-dark text-light" : "bg-light text-dark"}`} style={{ overflow: "hidden" }}>
-      {" "}
       <Container>
         <motion.h2
           className="text-center fw-bold mb-5"
@@ -54,6 +59,7 @@ export default function ExperienceSection({ darkMode }: Props) {
         >
           Experience
         </motion.h2>
+
         <div
           className="mx-auto"
           style={{
@@ -65,6 +71,7 @@ export default function ExperienceSection({ darkMode }: Props) {
         >
           {timeline.map((item, index) => {
             const isLeft = index % 2 === 0;
+            const isNow = item.year === "Now";
 
             return (
               <motion.div
@@ -98,15 +105,18 @@ export default function ExperienceSection({ darkMode }: Props) {
                   <p className="text-primary fw-semibold mb-0">{item.company}</p>
                   <small className="opacity-75">{item.year}</small>
 
-                  <ul className="mt-3 mb-0" style={{ paddingLeft: "18px" }}>
+                  <ul className="list-unstyled mt-3 mb-0">
                     {item.desc.map((d, i) => (
-                      <li
-                        key={i}
-                        style={{
-                          marginBottom: "6px",
-                          listStyle: "disc",
-                        }}
-                      >
+                      <li key={i} className="d-flex" style={{ marginBottom: "6px" }}>
+                        {isNow ? (
+                          <span className="me-2 text-success fw-bold" style={{ fontSize: "1rem" }}>
+                            ✓
+                          </span>
+                        ) : (
+                          <span className="me-2 fw-bold text-primary" style={{ fontSize: "1rem" }}>
+                            –
+                          </span>
+                        )}
                         {d}
                       </li>
                     ))}
@@ -117,15 +127,16 @@ export default function ExperienceSection({ darkMode }: Props) {
           })}
         </div>
       </Container>
-      {/* MOBILE FIX (1 kolom rapi) */}
+
+      {/* MOBILE FIX */}
       <style>
         {`
-      @media (max-width: 768px) {
-        .timeline-item {
-          justify-content: center !important;
-        }
-      }
-    `}
+          @media (max-width: 768px) {
+            .timeline-item {
+              justify-content: center !important;
+            }
+          }
+        `}
       </style>
     </section>
   );

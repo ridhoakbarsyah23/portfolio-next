@@ -25,20 +25,48 @@ export default function HomeSection({ darkMode = false }: Props) {
     >
       <Container>
         <motion.div initial={{ opacity: 0, y: 25 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="p-5 mx-auto" style={{ maxWidth: "750px" }}>
-          {/* Minimal rounded profile photo */}
+          {/* Bigger Profile Photo — show whole image (no crop) and keep rounded corners */}
           <motion.div
-            whileHover={{ scale: 1.02 }}
-            transition={{ type: "spring", stiffness: 200 }}
+            whileHover={{ scale: 1.03 }}
+            transition={{ type: "spring", stiffness: 180, damping: 14 }}
             className="mx-auto mb-4"
             style={{
-              width: 200,
-              height: 200,
-              borderRadius: "32px",
-              overflow: "hidden",
-              boxShadow: isDark ? "0 8px 30px rgba(255,255,255,0.08)" : "0 8px 30px rgba(0,0,0,0.08)",
+              width: 320,
+              height: 320,
+              borderRadius: "40px",
+              padding: "18px",
+              background: isDark ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.5)",
+              backdropFilter: "blur(10px)",
+              WebkitBackdropFilter: "blur(10px)",
+              boxShadow: isDark ? "0 16px 50px rgba(0,0,0,0.6), inset 0 6px 12px rgba(255,255,255,0.02)" : "0 18px 50px rgba(0,0,0,0.12), inset 0 6px 12px rgba(255,255,255,0.30)",
+              border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(255,255,255,0.6)",
             }}
           >
-            <Image src="/img-myself/Background-Merah.jpg" alt="My Profile" width={200} height={200} style={{ objectFit: "cover" }} priority />
+            {/* inner container: handles rounded corners and overflow */}
+            <div
+              style={{
+                position: "relative",
+                width: "100%",
+                height: "100%",
+                borderRadius: "30px",
+                overflow: "hidden", // diperlukan supaya sudut tetap rounded
+                display: "flex",
+                alignItems: "flex-start", // bantu positioning foto jika objectPosition top
+              }}
+            >
+              {/* Use next/image in fill mode for precise control */}
+              <Image
+                src="/img-myself/Background-Merah.jpg"
+                alt="My Profile"
+                fill
+                priority
+                style={{
+                  objectFit: "contain", // <-- tampilkan seluruh foto tanpa crop
+                  objectPosition: "top center", // <-- geser fokus ke atas (jika kepala terlalu tinggi)
+                  borderRadius: "30px",
+                }}
+              />
+            </div>
           </motion.div>
 
           {/* Name */}

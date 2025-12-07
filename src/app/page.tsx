@@ -6,6 +6,7 @@ import NavbarComponent from "@/components/NavbarComponent";
 import HomeSection from "@/components/HomeSection";
 import AboutSection from "@/components/AboutSection";
 import SkillsSection from "@/components/SkillsSection";
+import CertificateSection from "@/components/CertificateSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import ContactSection from "@/components/ContactSection";
 import FooterSection from "@/components/FooterSection";
@@ -18,7 +19,7 @@ export default function Home() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["home", "about", "skills", "projects", "contact"];
+      const sections = ["home", "about", "skills", "projects", "contact", "experience", "certificate", "blog"];
       const scrollY = window.scrollY + 150;
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = document.getElementById(sections[i]);
@@ -39,6 +40,7 @@ export default function Home() {
       <AboutSection />
       <ExperienceSection darkMode={darkMode} />
       <SkillsSection darkMode={darkMode} />
+      <CertificateSection darkMode={darkMode} />
       <ProjectsSection darkMode={darkMode} />
       <ContactSection />
       <BlogSection />

@@ -25,14 +25,15 @@ export default function HomeSection({ darkMode = false }: Props) {
     >
       <Container>
         <motion.div initial={{ opacity: 0, y: 25 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="p-5 mx-auto" style={{ maxWidth: "750px" }}>
-          {/* Bigger Profile Photo — show whole image (no crop) and keep rounded corners */}
+          {/* ===== Foto Profil (Sudah Responsive + Center) ===== */}
           <motion.div
             whileHover={{ scale: 1.03 }}
             transition={{ type: "spring", stiffness: 180, damping: 14 }}
             className="mx-auto mb-4"
             style={{
-              width: 320,
-              height: 320,
+              width: "100%",
+              maxWidth: 320,
+              aspectRatio: "1 / 1",
               borderRadius: "40px",
               padding: "18px",
               background: isDark ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.5)",
@@ -42,34 +43,33 @@ export default function HomeSection({ darkMode = false }: Props) {
               border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(255,255,255,0.6)",
             }}
           >
-            {/* inner container: handles rounded corners and overflow */}
             <div
               style={{
                 position: "relative",
                 width: "100%",
                 height: "100%",
                 borderRadius: "30px",
-                overflow: "hidden", // diperlukan supaya sudut tetap rounded
+                overflow: "hidden",
+                background: "#ffffff", // supaya saat contain tidak ada area hitam
                 display: "flex",
-                alignItems: "flex-start", // bantu positioning foto jika objectPosition top
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              {/* Use next/image in fill mode for precise control */}
               <Image
                 src="/img-myself/Background-Merah.jpg"
                 alt="My Profile"
                 fill
                 priority
                 style={{
-                  objectFit: "contain", // <-- tampilkan seluruh foto tanpa crop
-                  objectPosition: "top center", // <-- geser fokus ke atas (jika kepala terlalu tinggi)
-                  borderRadius: "30px",
+                  objectFit: "contain", // ⬅⬅ foto tidak terpotong sama sekali
+                  objectPosition: "center", // selalu ditengah
                 }}
               />
             </div>
           </motion.div>
 
-          {/* Name */}
+          {/* ===== Nama ===== */}
           <motion.h1
             className="fw-semibold mb-3"
             initial={{ opacity: 0 }}
@@ -84,7 +84,7 @@ export default function HomeSection({ darkMode = false }: Props) {
             Ridho Akbarsyah Ramadhan
           </motion.h1>
 
-          {/* Description */}
+          {/* ===== Deskripsi ===== */}
           <motion.p
             className="mb-4"
             initial={{ opacity: 0 }}
@@ -98,7 +98,7 @@ export default function HomeSection({ darkMode = false }: Props) {
             Frontend Developer — Cilacap, Central Java
           </motion.p>
 
-          {/* Buttons */}
+          {/* ===== Tombol ===== */}
           <motion.div className="d-flex flex-column flex-sm-row justify-content-center gap-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
             <Button
               size="lg"

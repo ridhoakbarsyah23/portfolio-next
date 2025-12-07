@@ -31,8 +31,6 @@ export default function CertificateSection({ darkMode }: CertificateSectionProps
       <div className="container mx-auto px-6">
         <h2 className={`text-4xl font-extrabold text-center drop-shadow-lg tracking-wide ${darkMode ? "text-white" : "text-gray-900"}`}>Certificates 🏆</h2>
 
-        <p className={`text-center mt-2 mb-12 text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Sertifikat keahlian yang telah saya capai</p>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-10 justify-items-center">
           {certificates.map((item) => (
             <div

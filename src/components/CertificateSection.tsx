@@ -29,7 +29,7 @@ export default function CertificateSection({ darkMode }: CertificateSectionProps
   return (
     <section id="certificate" className={`py-20 transition-all duration-300 ${darkMode ? "bg-gradient-to-b from-black to-gray-900" : "bg-gradient-to-b from-gray-100 to-white"}`}>
       <div className="container mx-auto px-6">
-        <h2 className={`text-4xl font-extrabold text-center drop-shadow-lg tracking-wide ${darkMode ? "text-white" : "text-gray-900"}`}>My Certificates 🏆</h2>
+        <h2 className={`text-4xl font-extrabold text-center drop-shadow-lg tracking-wide ${darkMode ? "text-white" : "text-gray-900"}`}>My Certificates</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-10 justify-items-center">
           {certificates.map((item) => (

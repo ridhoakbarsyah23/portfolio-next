@@ -43,7 +43,7 @@ export default function Home() {
       <CertificateSection darkMode={darkMode} />
       <ProjectsSection darkMode={darkMode} />
       <ContactSection />
-      <BlogSection />
+      <BlogSection darkMode={darkMode} />
       <FooterSection darkMode={darkMode} />
     </div>
   );

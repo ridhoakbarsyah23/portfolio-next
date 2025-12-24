@@ -8,82 +8,98 @@ export default function BlogSection({ darkMode }: Props) {
   return (
     <section
       id="blog"
-      className="relative py-32 transition-colors duration-300
-        bg-slate-50 text-slate-900
-        dark:bg-[#0a0a0a] dark:text-white
-        overflow-hidden"
+      className={`border-t py-20 transition-colors ${
+        darkMode
+          ? "border-white/10 bg-black text-white"
+          : "border-slate-200 bg-white text-slate-900"
+      }`}
     >
-      {/* Subtle Grid Background */}
-      <div
-        className="
-          absolute inset-0
-          bg-[linear-gradient(to_right,rgba(0,0,0,0.04)_1px,transparent_1px),
-              linear-gradient(to_bottom,rgba(0,0,0,0.04)_1px,transparent_1px)]
-          dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),
-                    linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)]
-          bg-[size:60px_60px]
-          opacity-40
-        "
-      />
+      <div className="mx-auto max-w-6xl px-6">
 
-      <div className="relative container mx-auto px-6 max-w-3xl text-center">
-        {/* Badge */}
-        <span
-          className="
-            inline-block mb-6 rounded-full border px-4 py-1 text-xs tracking-widest
-            border-slate-300 text-slate-600
-            dark:border-white/20 dark:text-white/60
-          "
-        >
-          BLOG
-        </span>
-
-        {/* Title */}
-        <h2 className="text-4xl md:text-6xl font-semibold tracking-tight">Articles</h2>
-
-        {/* Subtitle */}
-        <p
-          className="
-            mt-4 text-base md:text-lg
-            text-slate-600
-            dark:text-white/60
-          "
-        >
-          Writing about development, technology, and experiences.
-        </p>
-
-        {/* Divider */}
-        <div
-          className="
-            mx-auto mt-10 h-px w-40
-            bg-gradient-to-r from-transparent via-slate-300 to-transparent
-            dark:via-white/30
-          "
-        />
-
-        {/* Status */}
-        <div className="mt-12">
+        {/* Header */}
+        <div className="mb-12 text-center">
           <p
-            className="
-              text-sm uppercase tracking-[0.3em]
-              text-slate-500
-              dark:text-white/50
-            "
+            className={`mb-2 text-xs font-medium uppercase tracking-widest ${
+              darkMode ? "text-white/40" : "text-slate-500"
+            }`}
           >
-            Under Development
+            Blog
           </p>
 
+          <h2 className="text-3xl font-semibold md:text-5xl">
+            Writing about building things on the web.
+          </h2>
+
           <p
-            className="
-              mt-4 max-w-xl mx-auto text-sm md:text-base leading-relaxed
-              text-slate-600
-              dark:text-white/60
-            "
+            className={`mx-auto mt-4 max-w-2xl text-sm md:text-base ${
+              darkMode ? "text-white/60" : "text-slate-600"
+            }`}
           >
-            This section is currently being crafted. Soon, it will feature carefully written articles focused on modern web development and software engineering.
+            Short essays and notes on software engineering, frontend architecture, and lessons learned from real projects.
           </p>
         </div>
+
+        {/* Grid Content */}
+        <div
+          className={`grid grid-cols-2 gap-8 border-t pt-10 md:grid-cols-3 ${
+            darkMode ? "border-white/10" : "border-slate-200"
+          }`}
+        >
+          <BlogItem
+            title="Engineering Notes"
+            desc="Thoughts on architecture, trade-offs, and maintainable code."
+            darkMode={darkMode}
+          />
+          <BlogItem
+            title="Practical Lessons"
+            desc="What actually worked — and what didn’t — in real projects."
+            darkMode={darkMode}
+          />
+          <BlogItem
+            title="Tools & Workflow"
+            desc="Frameworks, libraries, and workflows I trust and use."
+            darkMode={darkMode}
+          />
+        </div>
+
+        {/* Footer */}
+        <p
+          className={`mt-10 text-center text-sm ${
+            darkMode ? "text-white/40" : "text-slate-500"
+          }`}
+        >
+          Articles coming soon. No rush — quality first.
+        </p>
       </div>
     </section>
+  );
+}
+
+function BlogItem({
+  title,
+  desc,
+  darkMode,
+}: {
+  title: string;
+  desc: string;
+  darkMode: boolean;
+}) {
+  return (
+    <div
+      className={`rounded-2xl p-5 shadow-sm transition-all hover:shadow-md ${
+        darkMode
+          ? "bg-white/5 text-white hover:bg-white/10 shadow-[0_0_15px_rgba(255,255,255,0.05)]"
+          : "bg-slate-50 text-slate-800 hover:bg-slate-100"
+      }`}
+    >
+      <h3 className="text-md font-medium md:text-lg">{title}</h3>
+      <p
+        className={`mt-2 text-xs md:text-sm ${
+          darkMode ? "text-white/60" : "text-slate-600"
+        }`}
+      >
+        {desc}
+      </p>
+    </div>
   );
 }

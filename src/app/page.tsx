@@ -6,12 +6,10 @@ import NavbarComponent from "@/components/NavbarComponent";
 import HomeSection from "@/components/HomeSection";
 import AboutSection from "@/components/AboutSection";
 import SkillsSection from "@/components/SkillsSection";
-import CertificateSection from "@/components/CertificateSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import ContactSection from "@/components/ContactSection";
 import FooterSection from "@/components/FooterSection";
 import ExperienceSection from "@/components/ExperienceSection";
-import BlogSection from "@/components/BlogSection";
 
 export default function Home() {
   const [darkMode, setDarkMode] = useState(false);
@@ -40,10 +38,8 @@ export default function Home() {
       <AboutSection />
       <ExperienceSection darkMode={darkMode} />
       <SkillsSection darkMode={darkMode} />
-      <CertificateSection darkMode={darkMode} />
       <ProjectsSection darkMode={darkMode} />
       <ContactSection />
-      <BlogSection darkMode={darkMode} />
       <FooterSection darkMode={darkMode} />
     </div>
   );

@@ -9,50 +9,73 @@ interface Props {
   activeLink: string;
 }
 
-export default function NavbarComponent({ darkMode, setDarkMode, activeLink }: Props) {
+export default function NavbarComponent({
+  darkMode,
+  setDarkMode,
+  activeLink,
+}: Props) {
   const [expanded, setExpanded] = useState(false);
 
   const mainLinks = ["home", "about", "blog"];
   const infoLinks = ["experience", "skills", "certificate", "projects", "contact"];
 
   return (
-    <Navbar expand="lg" expanded={expanded} onToggle={(val) => setExpanded(val)} fixed="top" className={darkMode ? "navbar-dark bg-dark shadow-sm" : "navbar-light bg-white shadow-sm"}>
+    <Navbar
+      expand="lg"
+      fixed="top"
+      expanded={expanded}
+      onToggle={() => setExpanded(!expanded)}
+      className={`custom-navbar ${darkMode ? "dark" : "light"}`}
+    >
       <Container>
-        <Navbar.Brand href="#home" className="d-flex align-items-center gap-2">
-          <span style={{ fontSize: "1.7rem" }}>🌐</span>
-          <span
-            style={{
-              fontWeight: "800",
-              fontSize: "1.5rem",
-              letterSpacing: "1px",
-            }}
-          >
-            Ridho
-          </span>
+        {/* BRAND */}
+        <Navbar.Brand href="#home" className="fw-bold brand-text">
+          Ridho<span className="text-primary">.</span>
         </Navbar.Brand>
 
-        <Navbar.Toggle onClick={() => setExpanded(!expanded)} />
+        <Navbar.Toggle aria-controls="main-navbar" />
 
-        <Navbar.Collapse>
-          <Nav className="ms-auto align-items-center gap-3">
-            {/* === MAIN LINKS (Home, About, Blog) === */}
+        <Navbar.Collapse id="main-navbar">
+          <Nav className="ms-auto align-items-lg-center gap-lg-4 gap-2">
+            {/* MAIN LINKS */}
             {mainLinks.map((id) => (
-              <Nav.Link key={id} href={`#${id}`} onClick={() => setExpanded(false)} className={`${activeLink === id ? "fw-semibold text-primary" : ""}`}>
+              <Nav.Link
+                key={id}
+                href={`#${id}`}
+                onClick={() => setExpanded(false)}
+                className={`nav-item-custom ${
+                  activeLink === id ? "active" : ""
+                }`}
+              >
                 {id.charAt(0).toUpperCase() + id.slice(1)}
               </Nav.Link>
             ))}
 
-            {/* === INFORMATION DROPDOWN === */}
-            <NavDropdown title="Information" id="information-dropdown" className={activeLink && infoLinks.includes(activeLink) ? "fw-semibold text-primary" : ""}>
+            {/* DROPDOWN */}
+            <NavDropdown
+              title="Information"
+              id="info-dropdown"
+              className={`nav-item-custom ${
+                infoLinks.includes(activeLink) ? "active" : ""
+              }`}
+            >
               {infoLinks.map((id) => (
-                <NavDropdown.Item key={id} href={`#${id}`} onClick={() => setExpanded(false)}>
+                <NavDropdown.Item
+                  key={id}
+                  href={`#${id}`}
+                  onClick={() => setExpanded(false)}
+                >
                   {id.charAt(0).toUpperCase() + id.slice(1)}
                 </NavDropdown.Item>
               ))}
             </NavDropdown>
 
-            {/* === DARK MODE BUTTON === */}
-            <Button variant={darkMode ? "light" : "dark"} size="sm" className="ms-2 rounded-circle" onClick={() => setDarkMode(!darkMode)}>
+            {/* DARK MODE */}
+            <Button
+              onClick={() => setDarkMode(!darkMode)}
+              className="theme-toggle"
+              aria-label="Toggle Dark Mode"
+            >
               {darkMode ? "☀️" : "🌙"}
             </Button>
           </Nav>

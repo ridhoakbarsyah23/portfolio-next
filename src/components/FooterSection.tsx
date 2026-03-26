@@ -28,9 +28,8 @@ export default function FooterSection({ darkMode }: Props) {
           </a>
         </div>
 
-        <p className="mb-1 fw-medium fs-6">Ridho Akbarsyah — Design • Code • Deploy</p>
         <p className="mb-0 small" style={{ color: darkMode ? "#9aa4b2" : "#6c757d" }}>
-          © {new Date().getFullYear()} <strong>Ridho Akbarsyah</strong> — Built with ❤️ using <strong>Next.js</strong>
+          © {new Date().getFullYear()} - <strong>Ridho Akbarsyah Ramadhan</strong>
         </p>
       </Container>
     </footer>

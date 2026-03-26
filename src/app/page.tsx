@@ -17,7 +17,7 @@ export default function Home() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["home", "about", "skills", "projects", "contact", "experience", "certificate", "blog"];
+      const sections = ["home", "about", "skills", "projects", "contact", "experience"];
       const scrollY = window.scrollY + 150;
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = document.getElementById(sections[i]);

@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { desc, image } from "framer-motion/client";
+import { title } from "process";
 import { Container, Row, Col } from "react-bootstrap";
 
 interface Props {
@@ -9,6 +11,11 @@ interface Props {
 
 export default function ProjectsSection({ darkMode }: Props) {
   const projects = [
+    {
+      title: "Online Data System (ODS) Mandiri",
+      desc: "ODS (Online Data System) Mandiri adalah website yang dirancang khusus untuk membantu dalam mengelola data koperasi secara efisien, termasuk informasi anggota, laporan keuangan dan transaksi lainnya yang tersebar diseluruh wilayah Indonesia.",
+      image: "/projects/ODS MANDIRI.png"
+    },
     {
       title: "SIMRS",
       desc: "A Hospital Management Information System designed to support hospital operations online.",

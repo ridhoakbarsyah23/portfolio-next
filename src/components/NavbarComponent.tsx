@@ -16,8 +16,8 @@ export default function NavbarComponent({
 }: Props) {
   const [expanded, setExpanded] = useState(false);
 
-  const mainLinks = ["home", "about", "blog"];
-  const infoLinks = ["experience", "skills", "certificate", "projects", "contact"];
+  const mainLinks = ["home", "about"];
+  const infoLinks = ["experience", "skills", "projects", "contact"];
 
   return (
     <Navbar

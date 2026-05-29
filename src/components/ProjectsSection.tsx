@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { desc, image } from "framer-motion/client";
+import { title } from "process";
 import { Container, Row, Col } from "react-bootstrap";
 
 interface Props {

@@ -17,7 +17,7 @@ export default function NavbarComponent({
   const [expanded, setExpanded] = useState(false);
 
   const mainLinks = ["home", "about", "blog"];
-  const infoLinks = ["experience", "skills", "certificate", "projects", "contact"];
+  const infoLinks = ["experience", "skills", "projects", "contact"];
 
   return (
     <Navbar
@@ -29,11 +29,11 @@ export default function NavbarComponent({
     >
       <Container>
         {/* BRAND */}
-        <Navbar.Brand href="#home" className="fw-bold brand-text">
+        <Navbar.Brand href="#home" className="fw-bold brand-text" aria-label="Ridho Akbarsyah portfolio home">
           Ridho<span className="text-primary">.</span>
         </Navbar.Brand>
 
-        <Navbar.Toggle aria-controls="main-navbar" />
+        <Navbar.Toggle aria-controls="main-navbar" className="border-0 custom-toggler" />
 
         <Navbar.Collapse id="main-navbar">
           <Nav className="ms-auto align-items-lg-center gap-lg-4 gap-2">
@@ -53,11 +53,12 @@ export default function NavbarComponent({
 
             {/* DROPDOWN */}
             <NavDropdown
-              title="Information"
+              title="More"
               id="info-dropdown"
               className={`nav-item-custom ${
                 infoLinks.includes(activeLink) ? "active" : ""
               }`}
+              menuVariant={darkMode ? "dark" : "light"}
             >
               {infoLinks.map((id) => (
                 <NavDropdown.Item
@@ -74,9 +75,9 @@ export default function NavbarComponent({
             <Button
               onClick={() => setDarkMode(!darkMode)}
               className="theme-toggle"
-              aria-label="Toggle Dark Mode"
+              aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
             >
-              {darkMode ? "☀️" : "🌙"}
+              {darkMode ? "☀️ Light" : "🌙 Dark"}
             </Button>
           </Nav>
         </Navbar.Collapse>

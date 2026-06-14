@@ -1,105 +1,136 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { Badge, Col, Container, Row, Spinner } from "react-bootstrap";
+import type { BlogPost } from "@/types/blog";
+
 interface Props {
   darkMode: boolean;
 }
 
+const fallbackPosts: BlogPost[] = [
+  {
+    id: "next-portfolio",
+    title: "Cara Membuat Portofolio Website dengan Next.js",
+    category: "Frontend",
+    date: "20 Nov 2025",
+    excerpt: "Catatan ringkas tentang struktur, komponen, dan detail UI saat membuat portofolio modern.",
+    image: "/images-blog/blog-1.jpg",
+    published: true,
+  },
+  {
+    id: "coding-consistency",
+    title: "Tips Menjaga Konsistensi Ngoding",
+    category: "Workflow",
+    date: "18 Nov 2025",
+    excerpt: "Beberapa kebiasaan sederhana untuk menjaga progres belajar dan membangun project tetap jalan.",
+    image: "/images-blog/blog-2.jpg",
+    published: true,
+  },
+  {
+    id: "ui-ux-developer",
+    title: "Belajar UI/UX untuk Developer",
+    category: "Design",
+    date: "15 Nov 2025",
+    excerpt: "Dasar-dasar visual dan pengalaman pengguna yang membantu developer membuat aplikasi lebih rapi.",
+    image: "/images-blog/blog-3.jpg",
+    published: true,
+  },
+];
+
 export default function BlogSection({ darkMode }: Props) {
+  const [posts, setPosts] = useState<BlogPost[]>(fallbackPosts);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadPosts = async () => {
+      try {
+        const response = await fetch("/api/blog", { cache: "no-store" });
+
+        if (!response.ok) {
+          throw new Error("Failed to load blog posts");
+        }
+
+        const data = (await response.json()) as BlogPost[];
+
+        if (mounted && data.length > 0) {
+          setPosts(data);
+        }
+      } catch {
+        setPosts(fallbackPosts);
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadPosts();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   return (
-    <section
+    <motion.section
       id="blog"
-      className={`border-t py-20 transition-colors ${
-        darkMode
-          ? "border-white/10 bg-black text-white"
-          : "border-slate-200 bg-white text-slate-900"
-      }`}
+      className={`py-5 ${darkMode ? "bg-dark text-light" : "bg-light text-dark"}`}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
     >
-      <div className="mx-auto max-w-6xl px-6">
-
-        {/* Header */}
-        <div className="mb-12 text-center">
-          <p
-            className={`mb-2 text-xs font-medium uppercase tracking-widest ${
-              darkMode ? "text-white/40" : "text-slate-500"
-            }`}
-          >
-            Blog
-          </p>
-
-          <h2 className="text-3xl font-semibold md:text-5xl">
-            Writing about building things on the web.
-          </h2>
-
-          <p
-            className={`mx-auto mt-4 max-w-2xl text-sm md:text-base ${
-              darkMode ? "text-white/60" : "text-slate-600"
-            }`}
-          >
-            Short essays and notes on software engineering, frontend architecture, and lessons learned from real projects.
+      <Container>
+        <div className="text-center mb-5">
+          <p className="text-primary fw-semibold text-uppercase small mb-2">Blog</p>
+          <h2 className="fw-bold fs-2 mb-3">Writing Notes</h2>
+          <p className={`mx-auto mb-0 ${darkMode ? "text-light opacity-75" : "text-muted"}`} style={{ maxWidth: 680 }}>
+            Short notes about frontend development, workflow, and design lessons from building real projects.
           </p>
         </div>
 
-        {/* Grid Content */}
-        <div
-          className={`grid grid-cols-2 gap-8 border-t pt-10 md:grid-cols-3 ${
-            darkMode ? "border-white/10" : "border-slate-200"
-          }`}
-        >
-          <BlogItem
-            title="Engineering Notes"
-            desc="Thoughts on architecture, trade-offs, and maintainable code."
-            darkMode={darkMode}
-          />
-          <BlogItem
-            title="Practical Lessons"
-            desc="What actually worked — and what didn’t — in real projects."
-            darkMode={darkMode}
-          />
-          <BlogItem
-            title="Tools & Workflow"
-            desc="Frameworks, libraries, and workflows I trust and use."
-            darkMode={darkMode}
-          />
-        </div>
+        {loading ? (
+          <div className="d-flex justify-content-center py-5">
+            <Spinner animation="border" variant="primary" role="status" />
+          </div>
+        ) : (
+          <Row className="g-4 justify-content-center">
+            {posts.map((post, index) => (
+              <Col key={post.id} md={6} lg={4} className="d-flex">
+                <motion.article
+                  className={`blog-card w-100 overflow-hidden ${darkMode ? "blog-card-dark" : "blog-card-light"}`}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.45, delay: index * 0.08 }}
+                  whileHover={{ y: -6 }}
+                >
+                  <div className="blog-image-wrapper position-relative">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={post.image} alt={post.title} className="blog-image" loading="lazy" />
+                  </div>
 
-        {/* Footer */}
-        <p
-          className={`mt-10 text-center text-sm ${
-            darkMode ? "text-white/40" : "text-slate-500"
-          }`}
-        >
-          Articles coming soon. No rush — quality first.
-        </p>
-      </div>
-    </section>
-  );
-}
+                  <div className="p-4 d-flex flex-column flex-grow-1">
+                    <div className="d-flex align-items-center justify-content-between gap-3 mb-3">
+                      <Badge bg="primary" className="rounded-pill px-3 py-2">
+                        {post.category}
+                      </Badge>
+                      <span className={`small ${darkMode ? "text-light opacity-75" : "text-muted"}`}>{post.date}</span>
+                    </div>
 
-function BlogItem({
-  title,
-  desc,
-  darkMode,
-}: {
-  title: string;
-  desc: string;
-  darkMode: boolean;
-}) {
-  return (
-    <div
-      className={`rounded-2xl p-5 shadow-sm transition-all hover:shadow-md ${
-        darkMode
-          ? "bg-white/5 text-white hover:bg-white/10 shadow-[0_0_15px_rgba(255,255,255,0.05)]"
-          : "bg-slate-50 text-slate-800 hover:bg-slate-100"
-      }`}
-    >
-      <h3 className="text-md font-medium md:text-lg">{title}</h3>
-      <p
-        className={`mt-2 text-xs md:text-sm ${
-          darkMode ? "text-white/60" : "text-slate-600"
-        }`}
-      >
-        {desc}
-      </p>
-    </div>
+                    <h3 className="h5 fw-bold mb-3">{post.title}</h3>
+                    <p className={`small mb-0 ${darkMode ? "text-light opacity-75" : "text-muted"}`}>{post.excerpt}</p>
+                  </div>
+                </motion.article>
+              </Col>
+            ))}
+          </Row>
+        )}
+      </Container>
+    </motion.section>
   );
 }

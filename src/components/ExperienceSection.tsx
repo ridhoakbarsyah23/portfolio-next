@@ -13,7 +13,9 @@ export default function ExperienceSection({ darkMode }: Props) {
       year: "Now",
       title: "Tenaga Ahli Online Data System (ODS) Deputi Kelembagaan dan Digitalisasi Koperasi",
       company: "Kementerian Koperasi Republik Indonesia",
-      desc: ["Handle the Online Data System project for the Deputy of Institutional Development and Cooperative Digitalization at the Ministry of Cooperatives of the Republic of Indonesia."],
+      desc: [
+        "Handle the Online Data System project for the Deputy of Institutional Development and Cooperative Digitalization at the Ministry of Cooperatives of the Republic of Indonesia.",
+      ],
     },
     {
       year: "2025",
@@ -30,13 +32,17 @@ export default function ExperienceSection({ darkMode }: Props) {
       year: "2023",
       title: "Frontend Developer",
       company: "PT. Tristar Surya Gemilang",
-      desc: ["Developed SISAPPRA 2.0 Website for Satpol PP DKI Jakarta.", "Enhanced features for Satpol PP Website.", "Developed NEW LMS Website for Bank BJB UMKM Segment."],
+      desc: [
+        "Developed SISAPPRA 2.0 Website for Satpol PP DKI Jakarta.",
+        "Enhanced features for Satpol PP Website.",
+        "Developed NEW LMS Website for Bank BJB UMKM Segment.",
+      ],
     },
     {
       year: "2021",
       title: "Frontend Developer Intern",
       company: "CV. Bahira Studio",
-      desc: ["Redesigned UI for the financial system website “Laraduit”."],
+      desc: ['Redesigned UI for the financial system website "Laraduit".'],
     },
   ];
 
@@ -71,11 +77,11 @@ export default function ExperienceSection({ darkMode }: Props) {
         >
           {timeline.map((item, index) => {
             const isLeft = index % 2 === 0;
-            const isNow = item.year === "Now";
+            const marker = item.year === "Now" ? "OK" : "-";
 
             return (
               <motion.div
-                key={index}
+                key={item.title}
                 initial={{ opacity: 0, x: isLeft ? -70 : 70 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -106,17 +112,11 @@ export default function ExperienceSection({ darkMode }: Props) {
                   <small className="opacity-75">{item.year}</small>
 
                   <ul className="list-unstyled mt-3 mb-0">
-                    {item.desc.map((d, i) => (
-                      <li key={i} className="d-flex" style={{ marginBottom: "6px" }}>
-                        {isNow ? (
-                          <span className="me-2 text-success fw-bold" style={{ fontSize: "1rem" }}>
-                            ✓
-                          </span>
-                        ) : (
-                          <span className="me-2 fw-bold text-primary" style={{ fontSize: "1rem" }}>
-                            –
-                          </span>
-                        )}
+                    {item.desc.map((d) => (
+                      <li key={d} className="d-flex" style={{ marginBottom: "6px" }}>
+                        <span className={`me-2 fw-bold ${marker === "OK" ? "text-success" : "text-primary"}`} style={{ fontSize: "1rem" }}>
+                          {marker}
+                        </span>
                         {d}
                       </li>
                     ))}
@@ -128,7 +128,6 @@ export default function ExperienceSection({ darkMode }: Props) {
         </div>
       </Container>
 
-      {/* MOBILE FIX */}
       <style>
         {`
           @media (max-width: 768px) {

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import "@/app/globals.css";
+import { useState, useEffect } from "react";
 import NavbarComponent from "@/components/NavbarComponent";
 import HomeSection from "@/components/HomeSection";
 import AboutSection from "@/components/AboutSection";
@@ -10,6 +10,7 @@ import ProjectsSection from "@/components/ProjectsSection";
 import ContactSection from "@/components/ContactSection";
 import FooterSection from "@/components/FooterSection";
 import ExperienceSection from "@/components/ExperienceSection";
+import BlogSection from "@/components/BlogSection";
 
 export default function Home() {
   const [darkMode, setDarkMode] = useState(false);
@@ -17,7 +18,7 @@ export default function Home() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["home", "about", "skills", "projects", "contact", "experience"];
+      const sections = ["home", "about", "experience", "skills", "projects", "blog", "contact"];
       const scrollY = window.scrollY + 150;
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = document.getElementById(sections[i]);
@@ -39,6 +40,7 @@ export default function Home() {
       <ExperienceSection darkMode={darkMode} />
       <SkillsSection darkMode={darkMode} />
       <ProjectsSection darkMode={darkMode} />
+      <BlogSection darkMode={darkMode} />
       <ContactSection />
       <FooterSection darkMode={darkMode} />
     </div>

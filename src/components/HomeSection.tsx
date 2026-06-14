@@ -24,8 +24,13 @@ export default function HomeSection({ darkMode = false }: Props) {
       }}
     >
       <Container>
-        <motion.div initial={{ opacity: 0, y: 25 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="p-5 mx-auto" style={{ maxWidth: "750px" }}>
-          {/* ===== Foto Profil (Sudah Responsive + Center) ===== */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="p-5 mx-auto"
+          style={{ maxWidth: "750px" }}
+        >
           <motion.div
             whileHover={{ scale: 1.03 }}
             transition={{ type: "spring", stiffness: 180, damping: 14 }}
@@ -39,7 +44,9 @@ export default function HomeSection({ darkMode = false }: Props) {
               background: isDark ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.5)",
               backdropFilter: "blur(10px)",
               WebkitBackdropFilter: "blur(10px)",
-              boxShadow: isDark ? "0 16px 50px rgba(0,0,0,0.6), inset 0 6px 12px rgba(255,255,255,0.02)" : "0 18px 50px rgba(0,0,0,0.12), inset 0 6px 12px rgba(255,255,255,0.30)",
+              boxShadow: isDark
+                ? "0 16px 50px rgba(0,0,0,0.6), inset 0 6px 12px rgba(255,255,255,0.02)"
+                : "0 18px 50px rgba(0,0,0,0.12), inset 0 6px 12px rgba(255,255,255,0.30)",
               border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(255,255,255,0.6)",
             }}
           >
@@ -50,7 +57,7 @@ export default function HomeSection({ darkMode = false }: Props) {
                 height: "100%",
                 borderRadius: "30px",
                 overflow: "hidden",
-                background: "#ffffff", // supaya saat contain tidak ada area hitam
+                background: "#ffffff",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -58,18 +65,17 @@ export default function HomeSection({ darkMode = false }: Props) {
             >
               <Image
                 src="/img-myself/Background-Merah.jpg"
-                alt="My Profile"
+                alt="Ridho Akbarsyah Ramadhan profile photo"
                 fill
                 priority
                 style={{
-                  objectFit: "contain", // ⬅⬅ foto tidak terpotong sama sekali
-                  objectPosition: "center", // selalu ditengah
+                  objectFit: "contain",
+                  objectPosition: "center",
                 }}
               />
             </div>
           </motion.div>
 
-          {/* ===== Nama ===== */}
           <motion.h1
             className="fw-semibold mb-3"
             initial={{ opacity: 0 }}
@@ -84,7 +90,6 @@ export default function HomeSection({ darkMode = false }: Props) {
             Ridho Akbarsyah Ramadhan
           </motion.h1>
 
-          {/* ===== Deskripsi ===== */}
           <motion.p
             className="mb-4"
             initial={{ opacity: 0 }}
@@ -95,11 +100,15 @@ export default function HomeSection({ darkMode = false }: Props) {
               color: isDark ? "#c7c7c7" : "#555555",
             }}
           >
-            Frontend Developer — Cilacap, Central Java
+            Frontend Developer - Cilacap, Central Java
           </motion.p>
 
-          {/* ===== Tombol ===== */}
-          <motion.div className="d-flex flex-column flex-sm-row justify-content-center gap-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
+          <motion.div
+            className="d-flex flex-column flex-sm-row justify-content-center gap-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
             <Button
               size="lg"
               href="#projects"
@@ -114,7 +123,12 @@ export default function HomeSection({ darkMode = false }: Props) {
               View Projects <FaArrowRight />
             </Button>
 
-            <a href="/CV_Ridho_Akbarsyah_Ramadhan.pdf" download className={`btn btn-lg px-4 py-2 rounded-pill d-flex align-items-center gap-2 shadow-sm ${isDark ? "btn-outline-light" : "btn-outline-dark"}`} style={{ fontWeight: 600 }}>
+            <a
+              href="/CV_Ridho_Akbarsyah_Ramadhan.pdf"
+              download
+              className={`btn btn-lg px-4 py-2 rounded-pill d-flex align-items-center gap-2 shadow-sm ${isDark ? "btn-outline-light" : "btn-outline-dark"}`}
+              style={{ fontWeight: 600 }}
+            >
               <FaDownload /> Download CV
             </a>
           </motion.div>

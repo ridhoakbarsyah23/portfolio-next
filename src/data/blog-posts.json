@@ -1,0 +1,47 @@
+[
+  {
+    "id": "5136724f-4946-4681-8781-4c31f5db594a",
+    "title": "AI condition",
+    "category": "Artificial Intelligence",
+    "date": "14 Jun 2026",
+    "excerpt": "AI Condition adalah fitur cerdas yang menggunakan pemrosesan bahasa alami (NLP) untuk mengambil keputusan otomatis dalam alur percakapan. Berbeda dengan kondisi biasa yang hanya mendeteksi kata kunci baku, fitur ini menganalisis makna, nada, dan konteks pesan pelanggan untuk mengarahkan alur.",
+    "image": "https://res.cloudinary.com/jerrick/image/upload/d_642250b563292b35f27461a7.png,f_jpg,fl_progressive,q_auto,w_1024/6852340335fbd2001d969b33.png",
+    "published": true
+  },
+  {
+    "id": "f4ce3446-a101-4841-96d6-5376fab38023",
+    "title": "Vibe Coding",
+    "category": "General",
+    "date": "14 Jun 2026",
+    "excerpt": "Vibe coding adalah metode pengembangan perangkat lunak di mana Anda membuat aplikasi atau program hanya dengan memberikan instruksi menggunakan bahasa sehari-hari, sementara Kecerdasan Buatan (AI) yang menulis dan memperbaiki kodenya. Istilah ini dicetuskan oleh salah satu pendiri OpenAI, Andrej Karpathy",
+    "image": "https://aiforproductivity.id/wp-content/uploads/2025/10/vibecoding.jpg",
+    "published": true
+  },
+  {
+    "id": "next-portfolio",
+    "title": "Cara Membuat Portofolio Website dengan Next.js",
+    "category": "Frontend",
+    "date": "20 Nov 2025",
+    "excerpt": "Catatan ringkas tentang struktur, komponen, dan detail UI saat membuat portofolio modern.",
+    "image": "/images-blog/blog-1.jpg",
+    "published": true
+  },
+  {
+    "id": "coding-consistency",
+    "title": "Tips Menjaga Konsistensi Ngoding",
+    "category": "Workflow",
+    "date": "18 Nov 2025",
+    "excerpt": "Beberapa kebiasaan sederhana untuk menjaga progres belajar dan membangun project tetap jalan.",
+    "image": "/images-blog/blog-2.jpg",
+    "published": true
+  },
+  {
+    "id": "ui-ux-developer",
+    "title": "Belajar UI/UX untuk Developer",
+    "category": "Design",
+    "date": "15 Nov 2025",
+    "excerpt": "Dasar-dasar visual dan pengalaman pengguna yang membantu developer membuat aplikasi lebih rapi.",
+    "image": "/images-blog/blog-3.jpg",
+    "published": true
+  }
+]

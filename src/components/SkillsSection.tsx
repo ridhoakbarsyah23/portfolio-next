@@ -25,7 +25,7 @@ export default function SkillsSection({ darkMode }: Props) {
   return (
     <motion.section id="skills" className={`text-center py-5 position-relative overflow-hidden ${darkMode ? "bg-dark text-light" : "bg-light text-dark"}`} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
       <Container>
-        <h2 className="fw-bold mb-5 text-primary fs-2 position-relative z-2">💡 My Skills</h2>
+        <h2 className="fw-bold mb-5 text-primary fs-2 position-relative z-2">My Skills</h2>
 
         <Row className="g-4 justify-content-center">
           {skills.map((skill, i) => (

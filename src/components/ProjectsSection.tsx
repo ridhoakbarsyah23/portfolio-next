@@ -1,8 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { desc, image } from "framer-motion/client";
-import { title } from "process";
 import { Container, Row, Col } from "react-bootstrap";
 
 interface Props {
@@ -54,7 +52,7 @@ export default function ProjectsSection({ darkMode }: Props) {
     >
       <Container className="position-relative" style={{ zIndex: 2 }}>
         <div className="d-flex flex-column align-items-center mb-4">
-          <h2 className="fw-bold text-primary fs-2">💼 Projects</h2>
+          <h2 className="fw-bold text-primary fs-2">Projects</h2>
 
           <p
             className={`mt-3 mb-0 mx-auto ${

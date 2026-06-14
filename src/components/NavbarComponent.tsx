@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Container, Navbar, Nav, NavDropdown, Button } from "react-bootstrap";
+import { FaMoon, FaSun } from "react-icons/fa";
 
 interface Props {
   darkMode: boolean;
@@ -9,27 +10,27 @@ interface Props {
   activeLink: string;
 }
 
-export default function NavbarComponent({
-  darkMode,
-  setDarkMode,
-  activeLink,
-}: Props) {
+export default function NavbarComponent({ darkMode, setDarkMode, activeLink }: Props) {
   const [expanded, setExpanded] = useState(false);
 
   const mainLinks = ["home", "about"];
-  const infoLinks = ["experience", "skills", "projects", "contact"];
+  const infoLinks = ["experience", "skills", "projects", "blog", "contact"];
+
+  const formatLabel = (id: string) => id.charAt(0).toUpperCase() + id.slice(1);
+  const closeMenu = () => setExpanded(false);
 
   return (
     <Navbar
       expand="lg"
       fixed="top"
       expanded={expanded}
-      onToggle={() => setExpanded(!expanded)}
+      onToggle={(nextExpanded) => setExpanded(nextExpanded)}
+      variant={darkMode ? "dark" : "light"}
+      data-bs-theme={darkMode ? "dark" : "light"}
       className={`custom-navbar ${darkMode ? "dark" : "light"}`}
     >
       <Container>
-        {/* BRAND */}
-        <Navbar.Brand href="#home" className="fw-bold brand-text" aria-label="Ridho Akbarsyah portfolio home">
+        <Navbar.Brand href="#home" onClick={closeMenu} className="fw-bold brand-text" aria-label="Ridho Akbarsyah portfolio home">
           Ridho<span className="text-primary">.</span>
         </Navbar.Brand>
 
@@ -37,47 +38,38 @@ export default function NavbarComponent({
 
         <Navbar.Collapse id="main-navbar">
           <Nav className="ms-auto align-items-lg-center gap-lg-4 gap-2">
-            {/* MAIN LINKS */}
             {mainLinks.map((id) => (
               <Nav.Link
                 key={id}
                 href={`#${id}`}
-                onClick={() => setExpanded(false)}
-                className={`nav-item-custom ${
-                  activeLink === id ? "active" : ""
-                }`}
+                onClick={closeMenu}
+                className={`nav-item-custom ${activeLink === id ? "active" : ""}`}
               >
-                {id.charAt(0).toUpperCase() + id.slice(1)}
+                {formatLabel(id)}
               </Nav.Link>
             ))}
 
-            {/* DROPDOWN */}
             <NavDropdown
               title="More"
               id="info-dropdown"
-              className={`nav-item-custom ${
-                infoLinks.includes(activeLink) ? "active" : ""
-              }`}
+              className={`nav-item-custom ${infoLinks.includes(activeLink) ? "active" : ""}`}
               menuVariant={darkMode ? "dark" : "light"}
             >
               {infoLinks.map((id) => (
-                <NavDropdown.Item
-                  key={id}
-                  href={`#${id}`}
-                  onClick={() => setExpanded(false)}
-                >
-                  {id.charAt(0).toUpperCase() + id.slice(1)}
+                <NavDropdown.Item key={id} href={`#${id}`} onClick={closeMenu} active={activeLink === id}>
+                  {formatLabel(id)}
                 </NavDropdown.Item>
               ))}
             </NavDropdown>
 
-            {/* DARK MODE */}
             <Button
               onClick={() => setDarkMode(!darkMode)}
-              className="theme-toggle"
+              className="theme-toggle d-inline-flex align-items-center justify-content-center gap-2"
               aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+              aria-pressed={darkMode}
             >
-              {darkMode ? "☀️ Light" : "🌙 Dark"}
+              {darkMode ? <FaSun aria-hidden="true" /> : <FaMoon aria-hidden="true" />}
+              <span>{darkMode ? "Light" : "Dark"}</span>
             </Button>
           </Nav>
         </Navbar.Collapse>

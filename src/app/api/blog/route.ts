@@ -32,6 +32,18 @@ class BlogStorageError extends Error {
   }
 }
 
+function toBlogStorageMessage(message: string, status: number) {
+  if (status === 403 && message.toLowerCase().includes("resource not accessible by personal access token")) {
+    return [
+      "Token GitHub tidak punya izin menulis ke repository.",
+      "Buat/ganti BLOG_GITHUB_TOKEN dengan akses repository yang benar dan permission Contents: Read and write.",
+      "Jika memakai classic token, gunakan scope repo.",
+    ].join(" ");
+  }
+
+  return message;
+}
+
 function isAuthorized(request: NextRequest) {
   return request.headers.get("x-admin-key") === ADMIN_KEY;
 }
@@ -62,7 +74,7 @@ async function readGithubFile() {
   const payload = (await response.json()) as GitHubContentResponse;
 
   if (!response.ok) {
-    throw new BlogStorageError(payload.message || "Gagal membaca data blog dari GitHub.", response.status);
+    throw new BlogStorageError(toBlogStorageMessage(payload.message || "Gagal membaca data blog dari GitHub.", response.status), response.status);
   }
 
   const content = payload.content ? Buffer.from(payload.content.replace(/\n/g, ""), "base64").toString("utf8") : "[]";
@@ -90,7 +102,7 @@ async function writeGithubFile(posts: BlogPost[]) {
   const payload = (await response.json()) as GitHubContentResponse;
 
   if (!response.ok) {
-    throw new BlogStorageError(payload.message || "Gagal menyimpan data blog ke GitHub.", response.status);
+    throw new BlogStorageError(toBlogStorageMessage(payload.message || "Gagal menyimpan data blog ke GitHub.", response.status), response.status);
   }
 }
 

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Badge, Col, Container, Row, Spinner } from "react-bootstrap";
+import { readJsonResponse } from "@/lib/readJsonResponse";
 import type { BlogPost } from "@/types/blog";
 
 interface Props {
@@ -54,9 +55,9 @@ export default function BlogSection({ darkMode }: Props) {
           throw new Error("Failed to load blog posts");
         }
 
-        const data = (await response.json()) as BlogPost[];
+        const data = await readJsonResponse<BlogPost[]>(response);
 
-        if (mounted && data.length > 0) {
+        if (mounted && data && data.length > 0) {
           setPosts(data);
         }
       } catch {

@@ -3,6 +3,7 @@
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { Alert, Badge, Button, Col, Container, Form, Row, Spinner, Table } from "react-bootstrap";
 import { FaEdit, FaPlus, FaSave, FaTrash } from "react-icons/fa";
+import { readJsonResponse } from "@/lib/readJsonResponse";
 import type { BlogPost } from "@/types/blog";
 
 const emptyPost: BlogPost = {
@@ -72,8 +73,8 @@ export default function AdminBlogPage() {
         throw new Error("Admin key tidak valid atau data gagal dimuat.");
       }
 
-      const data = (await response.json()) as BlogPost[];
-      setPosts(data);
+      const data = await readJsonResponse<BlogPost[]>(response);
+      setPosts(data || []);
       sessionStorage.setItem("blog-admin-key", key);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Gagal memuat blog.");
@@ -149,8 +150,8 @@ export default function AdminBlogPage() {
       });
 
       if (!response.ok) {
-        const payload = (await response.json()) as { message?: string };
-        throw new Error(payload.message || "Gagal menyimpan blog.");
+        const errorPayload = await readJsonResponse<{ message?: string }>(response);
+        throw new Error(errorPayload?.message || "Gagal menyimpan blog.");
       }
 
       await loadPosts(adminKey);

@@ -32,13 +32,14 @@ export default function AdminBlogPage() {
   const [newCategory, setNewCategory] = useState("");
 
   const isEditing = useMemo(() => Boolean(form.id), [form.id]);
+  const selectedCategory = categoryMode === "new" ? newCategory.trim() : form.category.trim();
   const titleIsValid = form.title.trim().length >= 5;
   const excerptIsValid = form.excerpt.trim().length >= 20;
-  const categoryIsValid = form.category.trim().length > 0;
+  const categoryIsValid = selectedCategory.length > 0;
   const dateIsValid = form.date.trim().length > 0;
   const imageValue = form.image.trim();
   const imageUrlIsValid = !imageValue || imageValue.startsWith("/") || imageValue.startsWith("http://") || imageValue.startsWith("https://");
-  const formIsValid = titleIsValid && excerptIsValid && categoryIsValid && dateIsValid && imageUrlIsValid && categoryMode === "select";
+  const formIsValid = titleIsValid && excerptIsValid && categoryIsValid && dateIsValid && imageUrlIsValid;
   const categories = useMemo(() => {
     const values = [...defaultCategories, ...posts.map((post) => post.category), ...extraCategories]
       .map((category) => category.trim())
@@ -134,10 +135,14 @@ export default function AdminBlogPage() {
     setMessage("");
 
     try {
+      if (categoryMode === "new") {
+        setExtraCategories((currentCategories) => (currentCategories.includes(selectedCategory) ? currentCategories : [...currentCategories, selectedCategory]));
+      }
+
       const payload = {
         ...form,
         title: form.title.trim(),
-        category: form.category.trim(),
+        category: selectedCategory,
         date: form.date.trim(),
         excerpt: form.excerpt.trim(),
         image: form.image.trim() || "/images-blog/blog-1.jpg",

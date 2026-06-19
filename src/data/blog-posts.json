@@ -1,5 +1,14 @@
 [
   {
+    "id": "aa6d8434-34ef-4b01-a419-3900def26259",
+    "title": "Testing",
+    "category": "General",
+    "date": "19 Jun 2026",
+    "excerpt": "Seorang software engineer adalah profesional teknologi yang merancang, mengembangkan, menguji, dan memelihara perangkat lunak menggunakan prinsip-prinsip rekayasa sistem. Berbeda dengan programmer yang sekadar menulis kode, profesi ini mencakup seluruh siklus hidup pengembangan perangkat lunak (SDLC) mulai dari analisis kebutuhan pengguna hingga pemeliharaan berkala",
+    "image": "/images-blog/blog-1.jpg",
+    "published": true
+  },
+  {
     "id": "5136724f-4946-4681-8781-4c31f5db594a",
     "title": "AI condition",
     "category": "Artificial Intelligence",

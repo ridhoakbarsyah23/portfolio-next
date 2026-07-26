@@ -6,15 +6,12 @@ import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa";
 import { BlogPost } from "@/types/blog";
 import Image from "next/image";
+import { readPosts } from "@/lib/blogStorage";
 
 // Using the route directly to fetch data
 async function getPost(id: string): Promise<BlogPost | null> {
   try {
-    const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000";
-    const res = await fetch(`${baseUrl}/api/blog`, { cache: "no-store" });
-    if (!res.ok) return null;
-    const data = await res.json();
-    const posts: BlogPost[] = Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : []);
+    const posts = await readPosts();
     return posts.find((p) => p.id === id) || null;
   } catch (error) {
     console.error("Error reading blog post:", error);

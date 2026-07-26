@@ -13,7 +13,7 @@ import ExperienceSection from "@/components/ExperienceSection";
 import BlogSection from "@/components/BlogSection";
 
 export default function Home() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const [activeLink, setActiveLink] = useState("home");
 
   useEffect(() => {

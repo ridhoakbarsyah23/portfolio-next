@@ -29,13 +29,13 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
 
   // Assuming global layout provides Bootstrap and basic styles.
   return (
-    <div className="bg-light text-dark min-vh-100 py-5">
+    <div className="bg-dark text-light min-vh-100 py-5">
       <Container className="py-4" style={{ maxWidth: 800 }}>
-        <Link href="/#blog" className="text-decoration-none mb-4 d-inline-flex align-items-center gap-2 text-primary fw-semibold">
+        <Link href="/#blog" className="text-decoration-none mb-4 d-inline-flex align-items-center gap-2 text-info fw-semibold">
           <FaArrowLeft /> Back to Portfolio
         </Link>
         
-        <article className="bg-white rounded-4 shadow-sm p-4 p-md-5 mt-3">
+        <article className="bg-black bg-opacity-50 rounded-4 shadow-sm p-4 p-md-5 mt-3 border border-secondary">
           <div className="mb-4">
             <Badge bg="primary" className="rounded-pill px-3 py-2 mb-3">
               {post.category}
@@ -82,18 +82,18 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
           margin: 2rem 0;
         }
         .markdown-content pre {
-          background-color: #f8f9fa;
+          background-color: #212529;
           padding: 1rem;
           border-radius: 8px;
           overflow-x: auto;
           margin-bottom: 1.5rem;
         }
         .markdown-content code {
-          background-color: #f8f9fa;
+          background-color: #212529;
           padding: 0.2rem 0.4rem;
           border-radius: 4px;
           font-family: monospace;
-          color: #d63384;
+          color: #ff79c6;
         }
         .markdown-content pre code {
           background-color: transparent;
@@ -103,7 +103,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
         .markdown-content blockquote {
           border-left: 4px solid #0d6efd;
           padding-left: 1rem;
-          color: #6c757d;
+          color: #adb5bd;
           font-style: italic;
           margin-bottom: 1.5rem;
         }
@@ -114,10 +114,10 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
         }
         .markdown-content th, .markdown-content td {
           padding: 0.75rem;
-          border: 1px solid #dee2e6;
+          border: 1px solid #495057;
         }
         .markdown-content th {
-          background-color: #f8f9fa;
+          background-color: #212529;
         }
       `}</style>
     </div>

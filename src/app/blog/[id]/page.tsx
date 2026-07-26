@@ -9,15 +9,12 @@ import Image from "next/image";
 
 // Using the route directly to fetch data
 async function getPost(id: string): Promise<BlogPost | null> {
-  // In a real app we might fetch from /api/blog or read file directly.
-  // We can use the absolute URL to fetch the post if we know the domain,
-  // but since we are server-side, it's safer to read the file.
   try {
-    const fs = await import("fs/promises");
-    const path = await import("path");
-    const filePath = path.join(process.cwd(), "src/data/blog-posts.json");
-    const file = await fs.readFile(filePath, "utf8");
-    const posts: BlogPost[] = JSON.parse(file);
+    const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000";
+    const res = await fetch(`${baseUrl}/api/blog`, { cache: "no-store" });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const posts: BlogPost[] = Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : []);
     return posts.find((p) => p.id === id) || null;
   } catch (error) {
     console.error("Error reading blog post:", error);

@@ -5,5 +5,6 @@ export interface BlogPost {
   date: string;
   excerpt: string;
   image: string;
+  content?: string;
   published: boolean;
 }

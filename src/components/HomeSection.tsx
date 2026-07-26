@@ -1,8 +1,9 @@
 "use client";
 
-import { Container, Button } from "react-bootstrap";
+import { useState } from "react";
+import { Container, Button, Modal } from "react-bootstrap";
 import { motion } from "framer-motion";
-import { FaDownload, FaArrowRight } from "react-icons/fa";
+import { FaDownload, FaArrowRight, FaEye } from "react-icons/fa";
 import Image from "next/image";
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
 
 export default function HomeSection({ darkMode = false }: Props) {
   const isDark = Boolean(darkMode);
+  const [showCV, setShowCV] = useState(false);
 
   return (
     <section
@@ -68,6 +70,7 @@ export default function HomeSection({ darkMode = false }: Props) {
                 alt="Ridho Akbarsyah Ramadhan profile photo"
                 fill
                 priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 style={{
                   objectFit: "contain",
                   objectPosition: "center",
@@ -123,17 +126,40 @@ export default function HomeSection({ darkMode = false }: Props) {
               View Projects <FaArrowRight />
             </Button>
 
-            <a
-              href="/CV_Ridho_Akbarsyah_Ramadhan.pdf"
-              download
-              className={`btn btn-lg px-4 py-2 rounded-pill d-flex align-items-center gap-2 shadow-sm ${isDark ? "btn-outline-light" : "btn-outline-dark"}`}
+            <Button
+              variant={isDark ? "outline-light" : "outline-dark"}
+              size="lg"
+              className="px-4 py-2 rounded-pill d-flex align-items-center gap-2 shadow-sm"
               style={{ fontWeight: 600 }}
+              onClick={() => setShowCV(true)}
             >
-              <FaDownload /> Download CV
-            </a>
+              <FaEye /> View CV
+            </Button>
           </motion.div>
         </motion.div>
       </Container>
+
+      {/* CV Modal */}
+      <Modal show={showCV} onHide={() => setShowCV(false)} size="lg" centered>
+        <Modal.Header closeButton className={isDark ? "bg-dark text-light border-secondary" : ""}>
+          <Modal.Title>Curriculum Vitae</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className={`p-0 ${isDark ? "bg-dark" : "bg-light"}`}>
+          <iframe
+            src="/CV_Ridho_Akbarsyah_Ramadhan.pdf"
+            title="CV Ridho Akbarsyah Ramadhan"
+            style={{ width: "100%", height: "75vh", border: "none" }}
+          />
+        </Modal.Body>
+        <Modal.Footer className={isDark ? "bg-dark border-secondary" : ""}>
+          <Button variant="secondary" onClick={() => setShowCV(false)}>
+            Close
+          </Button>
+          <a href="/CV_Ridho_Akbarsyah_Ramadhan.pdf" download className="btn btn-primary d-flex align-items-center gap-2">
+            <FaDownload /> Download File
+          </a>
+        </Modal.Footer>
+      </Modal>
     </section>
   );
 }

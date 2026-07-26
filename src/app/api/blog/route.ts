@@ -113,6 +113,7 @@ function cleanPost(post: Partial<BlogPost>, fallback?: BlogPost): BlogPost {
     category: String(post.category || fallback?.category || "General").trim(),
     date: String(post.date || fallback?.date || new Date().toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" })).trim(),
     excerpt: String(post.excerpt || fallback?.excerpt || "").trim(),
+    content: String(post.content || fallback?.content || "").trim(),
     image: String(post.image || fallback?.image || "/images-blog/blog-1.jpg").trim(),
     published: typeof post.published === "boolean" ? post.published : fallback?.published ?? true,
   };

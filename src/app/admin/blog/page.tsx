@@ -12,6 +12,7 @@ const emptyPost: BlogPost = {
   category: "General",
   date: new Date().toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" }),
   excerpt: "",
+  content: "",
   image: "/images-blog/blog-1.jpg",
   published: true,
 };
@@ -35,11 +36,12 @@ export default function AdminBlogPage() {
   const selectedCategory = categoryMode === "new" ? newCategory.trim() : form.category.trim();
   const titleIsValid = form.title.trim().length >= 5;
   const excerptIsValid = form.excerpt.trim().length >= 20;
+  const contentIsValid = (form.content || "").trim().length >= 10;
   const categoryIsValid = selectedCategory.length > 0;
   const dateIsValid = form.date.trim().length > 0;
   const imageValue = form.image.trim();
   const imageUrlIsValid = !imageValue || imageValue.startsWith("/") || imageValue.startsWith("http://") || imageValue.startsWith("https://");
-  const formIsValid = titleIsValid && excerptIsValid && categoryIsValid && dateIsValid && imageUrlIsValid;
+  const formIsValid = titleIsValid && excerptIsValid && contentIsValid && categoryIsValid && dateIsValid && imageUrlIsValid;
   const categories = useMemo(() => {
     const values = [...defaultCategories, ...posts.map((post) => post.category), ...extraCategories]
       .map((category) => category.trim())
@@ -299,6 +301,22 @@ export default function AdminBlogPage() {
                     isInvalid={Boolean(form.excerpt) && !excerptIsValid}
                   />
                   <Form.Control.Feedback type="invalid">Minimal 20 karakter.</Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                  <Form.Label>Content (Markdown) <span className="text-danger">*</span></Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={10}
+                    value={form.content || ""}
+                    onChange={(event) => setForm({ ...form, content: event.target.value })}
+                    required
+                    minLength={10}
+                    isInvalid={Boolean(form.content) && !contentIsValid}
+                    style={{ fontFamily: "monospace" }}
+                  />
+                  <Form.Text className="text-muted">Gunakan sintaks Markdown untuk formatting (# Heading, **bold**, dll).</Form.Text>
+                  <Form.Control.Feedback type="invalid">Minimal 10 karakter.</Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Check

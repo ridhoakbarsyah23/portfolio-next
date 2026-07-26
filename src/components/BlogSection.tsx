@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Badge, Col, Container, Row, Spinner } from "react-bootstrap";
+import Link from "next/link";
 import { readJsonResponse } from "@/lib/readJsonResponse";
 import type { BlogPost } from "@/types/blog";
 
@@ -102,31 +103,33 @@ export default function BlogSection({ darkMode }: Props) {
           <Row className="g-4 justify-content-center">
             {posts.map((post, index) => (
               <Col key={post.id} md={6} lg={4} className="d-flex">
-                <motion.article
-                  className={`blog-card w-100 overflow-hidden ${darkMode ? "blog-card-dark" : "blog-card-light"}`}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.45, delay: index * 0.08 }}
-                  whileHover={{ y: -6 }}
-                >
-                  <div className="blog-image-wrapper position-relative">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={post.image} alt={post.title} className="blog-image" loading="lazy" />
-                  </div>
-
-                  <div className="p-4 d-flex flex-column flex-grow-1">
-                    <div className="d-flex align-items-center justify-content-between gap-3 mb-3">
-                      <Badge bg="primary" className="rounded-pill px-3 py-2">
-                        {post.category}
-                      </Badge>
-                      <span className={`small ${darkMode ? "text-light opacity-75" : "text-muted"}`}>{post.date}</span>
+                <Link href={`/blog/${post.id}`} className="text-decoration-none w-100 d-flex">
+                  <motion.article
+                    className={`blog-card w-100 overflow-hidden ${darkMode ? "blog-card-dark" : "blog-card-light"}`}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.45, delay: index * 0.08 }}
+                    whileHover={{ y: -6 }}
+                  >
+                    <div className="blog-image-wrapper position-relative">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={post.image} alt={post.title} className="blog-image" loading="lazy" />
                     </div>
 
-                    <h3 className="h5 fw-bold mb-3">{post.title}</h3>
-                    <p className={`small mb-0 ${darkMode ? "text-light opacity-75" : "text-muted"}`}>{post.excerpt}</p>
-                  </div>
-                </motion.article>
+                    <div className="p-4 d-flex flex-column flex-grow-1">
+                      <div className="d-flex align-items-center justify-content-between gap-3 mb-3">
+                        <Badge bg="primary" className="rounded-pill px-3 py-2">
+                          {post.category}
+                        </Badge>
+                        <span className={`small ${darkMode ? "text-light opacity-75" : "text-muted"}`}>{post.date}</span>
+                      </div>
+
+                      <h3 className="h5 fw-bold mb-3">{post.title}</h3>
+                      <p className={`small mb-0 ${darkMode ? "text-light opacity-75" : "text-muted"}`}>{post.excerpt}</p>
+                    </div>
+                  </motion.article>
+                </Link>
               </Col>
             ))}
           </Row>

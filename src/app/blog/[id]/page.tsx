@@ -7,17 +7,12 @@ import { FaArrowLeft } from "react-icons/fa";
 import { BlogPost } from "@/types/blog";
 import Image from "next/image";
 
+import postsData from "@/data/blog-posts.json";
+
 // Using the route directly to fetch data
 async function getPost(id: string): Promise<BlogPost | null> {
-  // In a real app we might fetch from /api/blog or read file directly.
-  // We can use the absolute URL to fetch the post if we know the domain,
-  // but since we are server-side, it's safer to read the file.
   try {
-    const fs = await import("fs/promises");
-    const path = await import("path");
-    const filePath = path.join(process.cwd(), "src/data/blog-posts.json");
-    const file = await fs.readFile(filePath, "utf8");
-    const posts: BlogPost[] = JSON.parse(file);
+    const posts: BlogPost[] = postsData as BlogPost[];
     return posts.find((p) => p.id === id) || null;
   } catch (error) {
     console.error("Error reading blog post:", error);

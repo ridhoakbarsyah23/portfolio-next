@@ -5,6 +5,9 @@ import { Container, Button, Modal } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { FaDownload, FaArrowRight, FaEye } from "react-icons/fa";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+
+const PDFViewer = dynamic(() => import("./PDFViewer"), { ssr: false });
 
 interface Props {
   darkMode?: boolean;
@@ -145,11 +148,7 @@ export default function HomeSection({ darkMode = false }: Props) {
           <Modal.Title>Curriculum Vitae</Modal.Title>
         </Modal.Header>
         <Modal.Body className={`p-0 ${isDark ? "bg-dark" : "bg-light"}`}>
-          <iframe
-            src="/CV_Ridho_Akbarsyah_Ramadhan.pdf"
-            title="CV Ridho Akbarsyah Ramadhan"
-            style={{ width: "100%", height: "75vh", border: "none" }}
-          />
+          <PDFViewer url="/CV_Ridho_Akbarsyah_Ramadhan.pdf" />
         </Modal.Body>
         <Modal.Footer className={isDark ? "bg-dark border-secondary" : ""}>
           <Button variant="secondary" onClick={() => setShowCV(false)}>

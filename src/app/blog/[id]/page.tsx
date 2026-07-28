@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Container, Badge } from "react-bootstrap";
 import ReactMarkdown from "react-markdown";
@@ -7,19 +8,58 @@ import { FaArrowLeft } from "react-icons/fa";
 import { BlogPost } from "@/types/blog";
 import Image from "next/image";
 import { readPosts } from "@/lib/blogStorage";
+import { absoluteUrl, siteConfig } from "@/lib/seo";
 
 // Using the route directly to fetch data
 async function getPost(id: string): Promise<BlogPost | null> {
   try {
     const posts = await readPosts();
-    return posts.find((p) => p.id === id) || null;
+    return posts.find((p) => p.id === id && p.published) || null;
   } catch (error) {
     console.error("Error reading blog post:", error);
     return null;
   }
 }
 
-export default async function BlogDetailPage({ params }: { params: Promise<{ id: string }> }) {
+interface BlogDetailPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({ params }: BlogDetailPageProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  const post = await getPost(resolvedParams.id);
+
+  if (!post) {
+    return {
+      title: "Blog Not Found - Ridho Akbarsyah",
+    };
+  }
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+    alternates: {
+      canonical: absoluteUrl(`/blog/${post.id}`),
+    },
+    keywords: [post.title, post.category, "Ridho Akbarsyah blog", "frontend development", "portfolio blog"],
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      url: absoluteUrl(`/blog/${post.id}`),
+      siteName: siteConfig.name,
+      images: post.image ? [{ url: post.image }] : undefined,
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+      images: post.image ? [post.image] : undefined,
+    },
+  };
+}
+
+export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   const resolvedParams = await params;
   const post = await getPost(resolvedParams.id);
 

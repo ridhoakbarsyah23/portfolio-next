@@ -307,7 +307,7 @@ export default function AdminBlogPage() {
                       {posts.length === 0 && adminKey && !loading && (
                         <tr>
                           <td colSpan={4} className="text-center text-secondary py-5 border-secondary">
-                            Belum ada artikel. Klik "Tulis Artikel Baru" untuk memulai.
+                            Belum ada artikel. Klik &quot;Tulis Artikel Baru&quot; untuk memulai.
                           </td>
                         </tr>
                       )}
@@ -446,7 +446,7 @@ export default function AdminBlogPage() {
                               {form.content}
                             </ReactMarkdown>
                           ) : (
-                            <div className="text-secondary text-center py-5">Preview kosong. Mulai menulis di tab "Write".</div>
+                            <div className="text-secondary text-center py-5">Preview kosong. Mulai menulis di tab &quot;Write&quot;.</div>
                           )}
                         </div>
                       </Tab>

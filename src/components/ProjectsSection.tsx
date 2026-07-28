@@ -2,43 +2,15 @@
 
 import { motion } from "framer-motion";
 import { Container, Row, Col } from "react-bootstrap";
+import Link from "next/link";
+import { FaArrowRight } from "react-icons/fa";
+import { projects } from "@/data/projects";
 
 interface Props {
   darkMode: boolean;
 }
 
 export default function ProjectsSection({ darkMode }: Props) {
-  const projects = [
-    {
-      title: "Online Data System (ODS) Mandiri Kementerian Koperasi RI",
-      category: "Government",
-      tags: ["Next.js", "API", "Government"],
-      desc: "Online Data System (ODS) Koperasi adalah sistem berbasis digital yang dirancang untuk mempermudah pencatatan, pelaporan, serta pembaruan data koperasi secara mandiri oleh koperasi dan dinas koperasi sebagai instansi pembina.",
-      image: "/projects/ods.png",
-    },
-    {
-      title: "SIMRS",
-      category: "Healthcare",
-      tags: ["Laravel", "API", "Hospital"],
-      desc: "A Hospital Management Information System designed to support hospital operations online.",
-      image: "/projects/simrs.jpg",
-    },
-    {
-      title: "EMR",
-      category: "Medical Records",
-      tags: ["Laravel", "UI/UX", "Data"],
-      desc: "An Electronic Medical Record system for digital recording and management of patient medical data.",
-      image: "/projects/emr.jpg",
-    },
-    {
-      title: "SISAPPRA Satpol PP DKI Jakarta",
-      category: "Government",
-      tags: ["Dashboard", "Reporting", "Monitoring"],
-      desc: "A monitoring and reporting platform for the operational activities of Satpol PP of DKI Jakarta Province.",
-      image: "/projects/sisappra.png",
-    },
-  ];
-
   return (
     <motion.section
       id="projects"
@@ -67,7 +39,7 @@ export default function ProjectsSection({ darkMode }: Props) {
 
         <Row className="justify-content-center g-4 align-items-stretch">
           {projects.map((p, i) => (
-            <Col key={i} lg={4} md={6} sm={12} className="d-flex">
+            <Col key={p.id} lg={4} md={6} sm={12} className="d-flex">
               <motion.article
                 className={`project-card-custom rounded-4 overflow-hidden border-0 d-flex flex-column w-100 ${
                   darkMode ? "project-card-dark text-light" : "project-card-light text-dark"
@@ -90,60 +62,80 @@ export default function ProjectsSection({ darkMode }: Props) {
                   damping: 18,
                 }}
               >
-                <div className="position-relative overflow-hidden project-image-wrapper">
-                  <motion.img
-                    src={p.image}
-                    alt={p.title}
-                    className="w-100 project-card-image"
-                    whileHover={{ scale: 1.06 }}
-                    transition={{ duration: 0.45 }}
-                  />
+                <Link href={`/projects/${p.id}`} className="project-card-link text-decoration-none d-flex flex-column h-100" aria-label={`Read case study for ${p.title}`}>
+                  <div className="position-relative overflow-hidden project-image-wrapper">
+                    <motion.img
+                      src={p.image}
+                      alt={p.title}
+                      className="w-100 project-card-image"
+                      whileHover={{ scale: 1.06 }}
+                      transition={{ duration: 0.45 }}
+                    />
 
-                  <div className="project-card-category d-inline-flex align-items-center justify-content-center position-absolute top-0 end-0 m-3 rounded-pill px-3 py-1 text-white fw-semibold">
-                    {p.category}
-                  </div>
-                </div>
-
-                <div className="p-4 d-flex flex-column flex-grow-1">
-                  <div>
-                    <h5 className="fw-bold mb-2 project-title">{p.title}</h5>
-
-                    <p
-                      className={`small mb-3 project-desc ${
-                        darkMode ? "text-light opacity-75" : "text-muted"
-                      }`}
-                    >
-                      {p.desc}
-                    </p>
-
-                    <div className="project-tags-wrapper d-flex flex-wrap gap-2">
-                      {p.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className={`project-tag px-3 py-1 rounded-pill small ${
-                            darkMode ? "project-tag-dark" : "project-tag-light"
-                          }`}
-                        >
-                          {tag}
-                        </span>
-                      ))}
+                    <div className="project-card-category d-inline-flex align-items-center justify-content-center position-absolute top-0 end-0 m-3 rounded-pill px-3 py-1 text-white fw-semibold">
+                      {p.category}
                     </div>
                   </div>
 
-                  <div className="mt-auto d-flex justify-content-between align-items-center pt-4 project-footer">
-                    <span className="small text-primary fw-semibold">
-                      User centered
-                    </span>
+                  <div className="p-4 d-flex flex-column flex-grow-1">
+                    <div>
+                      <h5 className="fw-bold mb-2 project-title">{p.title}</h5>
 
-                    <span
-                      className={`project-badge rounded-pill px-3 py-1 small ${
-                        darkMode ? "project-badge-dark" : "project-badge-light"
-                      }`}
-                    >
-                      Designed for clarity
-                    </span>
+                      <p
+                        className={`small mb-3 project-desc ${
+                          darkMode ? "text-light opacity-75" : "text-muted"
+                        }`}
+                      >
+                        {p.desc}
+                      </p>
+
+                      <div className="project-proof-list text-start mb-3">
+                        <div className="project-proof-item">
+                          <span className="project-proof-label">Role</span>
+                          <p className="mb-0">{p.role}</p>
+                        </div>
+
+                        <div className="project-proof-item">
+                          <span className="project-proof-label">Problem</span>
+                          <p className="mb-0">{p.problem}</p>
+                        </div>
+
+                        <div className="project-proof-item">
+                          <span className="project-proof-label">Impact</span>
+                          <p className="mb-0">{p.impact}</p>
+                        </div>
+                      </div>
+
+                      <div className="project-tags-wrapper d-flex flex-wrap gap-2">
+                        {p.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className={`project-tag px-3 py-1 rounded-pill small ${
+                              darkMode ? "project-tag-dark" : "project-tag-light"
+                            }`}
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="mt-auto d-flex justify-content-between align-items-center gap-3 pt-4 project-footer">
+                      <span className="small text-primary fw-semibold">
+                        Read case study
+                      </span>
+
+                      <span
+                        className={`project-badge rounded-circle d-inline-flex align-items-center justify-content-center ${
+                          darkMode ? "project-badge-dark" : "project-badge-light"
+                        }`}
+                        aria-hidden="true"
+                      >
+                        <FaArrowRight />
+                      </span>
+                    </div>
                   </div>
-                </div>
+                </Link>
               </motion.article>
             </Col>
           ))}
@@ -154,8 +146,12 @@ export default function ProjectsSection({ darkMode }: Props) {
 
       <style jsx>{`
         .project-card-custom {
-          min-height: 540px;
+          min-height: 700px;
           transition: all 0.3s ease;
+        }
+
+        .project-card-link {
+          color: inherit;
         }
 
         .project-card-light {
@@ -203,6 +199,33 @@ export default function ProjectsSection({ darkMode }: Props) {
           overflow: hidden;
         }
 
+        .project-proof-list {
+          display: grid;
+          gap: 0.75rem;
+        }
+
+        .project-proof-item {
+          border-left: 3px solid rgba(13, 110, 253, 0.5);
+          padding-left: 0.85rem;
+        }
+
+        .project-proof-label {
+          display: block;
+          color: #0d6efd;
+          font-size: 0.7rem;
+          font-weight: 700;
+          letter-spacing: 0;
+          margin-bottom: 0.2rem;
+          text-transform: uppercase;
+        }
+
+        .project-proof-item p {
+          color: inherit;
+          font-size: 0.82rem;
+          line-height: 1.45;
+          opacity: 0.82;
+        }
+
         .project-tags-wrapper {
           min-height: 34px;
         }
@@ -224,6 +247,12 @@ export default function ProjectsSection({ darkMode }: Props) {
 
         .project-footer {
           min-height: 58px;
+        }
+
+        .project-badge {
+          flex: 0 0 auto;
+          height: 38px;
+          width: 38px;
         }
 
         .project-badge-light {

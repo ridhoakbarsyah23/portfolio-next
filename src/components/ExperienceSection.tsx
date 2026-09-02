@@ -10,39 +10,51 @@ interface Props {
 export default function ExperienceSection({ darkMode }: Props) {
   const timeline = [
     {
-      year: "Now",
-      title: "Tenaga Ahli Online Data System (ODS) Deputi Kelembagaan dan Digitalisasi Koperasi",
-      company: "Kementerian Koperasi Republik Indonesia",
+      year: "Desember 2025 - Saat ini",
+      title: "Programmer",
+      company: "Freelance",
       desc: [
-        "Handle the Online Data System project for the Deputy of Institutional Development and Cooperative Digitalization at the Ministry of Cooperatives of the Republic of Indonesia.",
+        "Mengembangkan aplikasi POS untuk UMKM.",
+        "Mengembangkan aplikasi AI Agent untuk customer service.",
       ],
     },
     {
-      year: "2025",
+      year: "Agustus 2025 - November 2025",
       title: "Programmer",
       company: "PT Data Kreatif",
       desc: [
-        "Fixing bugs in the Hospital Information System (SIMRS).",
-        "Developing new features based on user requirements.",
-        "Coordinating with implementation teams to identify needs.",
-        "Performing testing and debugging to ensure functionality.",
+        "Mengembangkan dan memelihara fitur pada sistem SIMRS dan EMR untuk mendukung operasional rumah sakit.",
+        "Mengidentifikasi dan memperbaiki bug aplikasi untuk meningkatkan stabilitas dan keandalan sistem.",
+        "Berkoordinasi dengan tim implementor dan pengguna rumah sakit untuk memahami kebutuhan serta menerjemahkannya menjadi solusi teknis.",
+        "Melakukan testing dan debugging untuk memastikan fitur berjalan sesuai kebutuhan dan fungsi yang ditentukan.",
+        "Melakukan peningkatan dan penyesuaian fitur berdasarkan feedback pengguna dan kebutuhan operasional.",
       ],
     },
     {
-      year: "2023",
-      title: "Frontend Developer",
-      company: "PT. Tristar Surya Gemilang",
+      year: "Januari 2025 - Juli 2025",
+      title: "Programmer",
+      company: "Freelance",
       desc: [
-        "Developed SISAPPRA 2.0 Website for Satpol PP DKI Jakarta.",
-        "Enhanced features for Satpol PP Website.",
-        "Developed NEW LMS Website for Bank BJB UMKM Segment.",
+        "Mengembangkan dan merancang aplikasi Dieng Run Event.",
       ],
     },
     {
-      year: "2021",
+      year: "Januari 2023 - Januari 2024",
+      title: "Frontend Developer",
+      company: "PT Tristar Surya Gemilang",
+      desc: [
+        "Mengembangkan fitur pada SISAPPRA versi 2.0 Satpol PP DKI Jakarta.",
+        "Mengembangkan fitur pada NEW LMS Bank BJB untuk segmen UMKM.",
+      ],
+    },
+    {
+      year: "Juli 2021 - September 2021",
       title: "Frontend Developer Intern",
-      company: "CV. Bahira Studio",
-      desc: ['Redesigned UI for the financial system website "Laraduit".'],
+      company: "CV Bahira Studio",
+      desc: [
+        'Merancang ulang antarmuka pengguna (UI) untuk website sistem keuangan "Laraduit".',
+        "Mengembangkan tampilan antarmuka yang lebih terstruktur dan sesuai dengan kebutuhan sistem.",
+      ],
     },
   ];
 
@@ -77,11 +89,11 @@ export default function ExperienceSection({ darkMode }: Props) {
         >
           {timeline.map((item, index) => {
             const isLeft = index % 2 === 0;
-            const marker = item.year === "Now" ? "OK" : "-";
+            const marker = index === 0 ? "OK" : "-";
 
             return (
               <motion.div
-                key={item.title}
+                key={`${item.year}-${item.company}-${item.title}`}
                 initial={{ opacity: 0, x: isLeft ? -70 : 70 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}

@@ -1,21 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Container, Button, Modal } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { FaDownload, FaArrowRight, FaEye } from "react-icons/fa";
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import { useTheme } from "next-themes";
 
 const PDFViewer = dynamic(() => import("./PDFViewer"), { ssr: false });
 
-interface Props {
-  darkMode?: boolean;
-}
-
-export default function HomeSection({ darkMode = false }: Props) {
-  const isDark = Boolean(darkMode);
+export default function HomeSection() {
+  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme } = useTheme();
   const [showCV, setShowCV] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  const isDark = mounted ? resolvedTheme === "dark" : true;
 
   return (
     <section

@@ -2,6 +2,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
 import type { Metadata } from "next";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { Plus_Jakarta_Sans } from "next/font/google";
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-plus-jakarta-sans",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -54,8 +61,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className={plusJakartaSans.className}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

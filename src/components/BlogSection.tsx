@@ -6,10 +6,7 @@ import { Badge, Col, Container, Row, Spinner } from "react-bootstrap";
 import Link from "next/link";
 import { readJsonResponse } from "@/lib/readJsonResponse";
 import type { BlogPost } from "@/types/blog";
-
-interface Props {
-  darkMode: boolean;
-}
+import { useTheme } from "next-themes";
 
 const fallbackPosts: BlogPost[] = [
   {
@@ -41,7 +38,14 @@ const fallbackPosts: BlogPost[] = [
   },
 ];
 
-export default function BlogSection({ darkMode }: Props) {
+export default function BlogSection() {
+  const [mountedTheme, setMountedTheme] = useState(false);
+  const { resolvedTheme } = useTheme();
+
+  useEffect(() => setMountedTheme(true), []);
+
+  const darkMode = mountedTheme ? resolvedTheme === "dark" : true;
+
   const [posts, setPosts] = useState<BlogPost[]>(fallbackPosts);
   const [loading, setLoading] = useState(true);
 
@@ -110,7 +114,7 @@ export default function BlogSection({ darkMode }: Props) {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.45, delay: index * 0.08 }}
-                    whileHover={{ y: -6 }}
+                    whileHover={{ y: -8, scale: 1.02 }}
                   >
                     <div className="blog-image-wrapper position-relative">
                       {/* eslint-disable-next-line @next/next/no-img-element */}

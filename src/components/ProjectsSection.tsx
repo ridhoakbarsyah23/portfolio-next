@@ -1,16 +1,21 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Container, Row, Col } from "react-bootstrap";
 import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa";
 import { projects } from "@/data/projects";
+import { useTheme } from "next-themes";
 
-interface Props {
-  darkMode: boolean;
-}
+export default function ProjectsSection() {
+  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme } = useTheme();
 
-export default function ProjectsSection({ darkMode }: Props) {
+  useEffect(() => setMounted(true), []);
+
+  const darkMode = mounted ? resolvedTheme === "dark" : true;
+
   return (
     <motion.section
       id="projects"

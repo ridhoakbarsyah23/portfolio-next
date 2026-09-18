@@ -1,14 +1,20 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
 import { FaLinkedin, FaGithub, FaInstagram } from "react-icons/fa";
+import { useTheme } from "next-themes";
 
-interface Props {
-  darkMode: boolean;
-}
+export default function FooterSection() {
+  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme } = useTheme();
 
-export default function FooterSection({ darkMode }: Props) {
+  useEffect(() => setMounted(true), []);
+
+  const darkMode = mounted ? resolvedTheme === "dark" : true;
+
   return (
+
     <footer
       className="mt-5 pt-4"
       style={{

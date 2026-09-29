@@ -7,16 +7,8 @@ import { useEffect, useState } from "react";
 import { experienceTimeline } from "@/data/experience";
 
 export default function ExperienceSection() {
-  const [mounted, setMounted] = useState(false);
-  const { resolvedTheme } = useTheme();
-
-  useEffect(() => setMounted(true), []);
-
-  const darkMode = mounted ? resolvedTheme === "dark" : true;
-
-
   return (
-    <section id="experience" className={`py-5 ${darkMode ? "bg-dark text-light" : "bg-light text-dark"}`} style={{ overflow: "hidden" }}>
+    <section id="experience" className="py-5" style={{ overflow: "hidden" }}>
       <Container>
         <motion.h2
           className="text-center fw-bold mb-5"
@@ -70,9 +62,9 @@ export default function ExperienceSection() {
                     maxWidth: "450px",
                     borderRadius: "18px",
                     backdropFilter: "blur(14px)",
-                    background: darkMode ? "rgba(255,255,255,0.07)" : "rgba(255,255,255,0.75)",
-                    border: darkMode ? "1px solid rgba(255,255,255,0.12)" : "1px solid rgba(0,0,0,0.1)",
-                    boxShadow: "0 8px 22px rgba(0,0,0,0.15), inset 0 0 12px rgba(255,255,255,0.04)",
+                    background: "var(--color-card)",
+                    border: "1px solid var(--color-border)",
+                    boxShadow: "0 8px 22px rgba(0,0,0,0.05)",
                     padding: "22px",
                   }}
                 >

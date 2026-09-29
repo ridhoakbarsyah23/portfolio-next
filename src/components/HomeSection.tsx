@@ -15,19 +15,18 @@ export default function HomeSection() {
   const { resolvedTheme } = useTheme();
   const [showCV, setShowCV] = useState(false);
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => { setMounted(true); }, []);
 
-  const isDark = mounted ? resolvedTheme === "dark" : true;
 
   return (
     <section
       id="home"
-      className={`d-flex align-items-center justify-content-center text-center ${isDark ? "bg-dark text-light" : "bg-light text-dark"}`}
+      className="d-flex align-items-center justify-content-center text-center"
       style={{
         minHeight: "100vh",
         padding: "40px 0",
-        background: isDark ? "#0d0d0d" : "#fafafa",
-        transition: "0.5s ease",
+        background: "var(--color-background)",
+        color: "var(--color-foreground)",
       }}
     >
       <Container>
@@ -44,17 +43,13 @@ export default function HomeSection() {
             className="mx-auto mb-4"
             style={{
               width: "100%",
-              maxWidth: 320,
+              maxWidth: 280,
               aspectRatio: "1 / 1",
-              borderRadius: "40px",
-              padding: "18px",
-              background: isDark ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.5)",
-              backdropFilter: "blur(10px)",
-              WebkitBackdropFilter: "blur(10px)",
-              boxShadow: isDark
-                ? "0 16px 50px rgba(0,0,0,0.6), inset 0 6px 12px rgba(255,255,255,0.02)"
-                : "0 18px 50px rgba(0,0,0,0.12), inset 0 6px 12px rgba(255,255,255,0.30)",
-              border: isDark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(255,255,255,0.6)",
+              borderRadius: "50%",
+              padding: "12px",
+              background: "var(--color-card)",
+              boxShadow: "0 20px 40px rgba(0,0,0,0.08)",
+              border: "1px solid var(--color-border)",
             }}
           >
             <div
@@ -62,9 +57,9 @@ export default function HomeSection() {
                 position: "relative",
                 width: "100%",
                 height: "100%",
-                borderRadius: "30px",
+                borderRadius: "50%",
                 overflow: "hidden",
-                background: "#ffffff",
+                background: "var(--color-muted)",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -77,8 +72,8 @@ export default function HomeSection() {
                 priority
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 style={{
-                  objectFit: "contain",
-                  objectPosition: "center",
+                  objectFit: "cover",
+                  objectPosition: "center top",
                 }}
               />
             </div>
@@ -90,9 +85,8 @@ export default function HomeSection() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
             style={{
-              fontSize: "2.8rem",
-              letterSpacing: "-1px",
-              color: isDark ? "#ffffff" : "#111111",
+              fontSize: "3.5rem",
+              color: "var(--color-foreground)",
             }}
           >
             Ridho Akbarsyah Ramadhan
@@ -104,8 +98,8 @@ export default function HomeSection() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.35 }}
             style={{
-              fontSize: "1.15rem",
-              color: isDark ? "#c7c7c7" : "#555555",
+              fontSize: "1.25rem",
+              color: "var(--color-secondary)",
             }}
           >
             Frontend Developer - Cilacap, Central Java
@@ -122,8 +116,8 @@ export default function HomeSection() {
               href="#projects"
               className="px-4 py-2 rounded-pill d-flex align-items-center gap-2 shadow-sm"
               style={{
-                background: isDark ? "#ffffff" : "#000000",
-                color: isDark ? "#000000" : "#ffffff",
+                background: "var(--color-primary)",
+                color: "var(--color-on-primary)",
                 border: "none",
                 fontWeight: 600,
               }}
@@ -132,7 +126,7 @@ export default function HomeSection() {
             </Button>
 
             <Button
-              variant={isDark ? "outline-light" : "outline-dark"}
+              variant="outline-secondary"
               size="lg"
               className="px-4 py-2 rounded-pill d-flex align-items-center gap-2 shadow-sm"
               style={{ fontWeight: 600 }}
@@ -146,13 +140,13 @@ export default function HomeSection() {
 
       {/* CV Modal */}
       <Modal show={showCV} onHide={() => setShowCV(false)} size="lg" centered>
-        <Modal.Header closeButton className={isDark ? "bg-dark text-light border-secondary" : ""}>
+        <Modal.Header closeButton style={{ background: "var(--color-card)", color: "var(--color-card-foreground)", borderBottom: "1px solid var(--color-border)" }}>
           <Modal.Title>Curriculum Vitae</Modal.Title>
         </Modal.Header>
-        <Modal.Body className={`p-0 ${isDark ? "bg-dark" : "bg-light"}`}>
+        <Modal.Body className="p-0" style={{ background: "var(--color-card)" }}>
           <PDFViewer url="/CV_Ridho_Akbarsyah_Ramadhan.pdf" />
         </Modal.Body>
-        <Modal.Footer className={isDark ? "bg-dark border-secondary" : ""}>
+        <Modal.Footer style={{ background: "var(--color-card)", borderTop: "1px solid var(--color-border)" }}>
           <Button variant="secondary" onClick={() => setShowCV(false)}>
             Close
           </Button>

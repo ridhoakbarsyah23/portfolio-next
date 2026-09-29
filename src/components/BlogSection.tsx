@@ -44,8 +44,7 @@ export default function BlogSection() {
 
   useEffect(() => setMountedTheme(true), []);
 
-  const darkMode = mountedTheme ? resolvedTheme === "dark" : true;
-
+  
   const [posts, setPosts] = useState<BlogPost[]>(fallbackPosts);
   const [loading, setLoading] = useState(true);
 
@@ -84,7 +83,7 @@ export default function BlogSection() {
   return (
     <motion.section
       id="blog"
-      className={`py-5 ${darkMode ? "bg-dark text-light" : "bg-light text-dark"}`}
+      className={`py-5 `}
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
@@ -94,7 +93,7 @@ export default function BlogSection() {
         <div className="text-center mb-5">
           <p className="text-primary fw-semibold text-uppercase small mb-2">Blog</p>
           <h2 className="fw-bold fs-2 mb-3">Writing Notes</h2>
-          <p className={`mx-auto mb-0 ${darkMode ? "text-light opacity-75" : "text-muted"}`} style={{ maxWidth: 680 }}>
+          <p className={`mx-auto mb-0 `} style={{ maxWidth: 680 }}>
             Short notes about frontend development, workflow, and design lessons from building real projects.
           </p>
         </div>
@@ -109,7 +108,7 @@ export default function BlogSection() {
               <Col key={post.id} md={6} lg={4} className="d-flex">
                 <Link href={`/blog/${post.id}`} className="text-decoration-none w-100 d-flex">
                   <motion.article
-                    className={`blog-card w-100 overflow-hidden ${darkMode ? "blog-card-dark" : "blog-card-light"}`}
+                    className={`blog-card w-100 overflow-hidden blog-card-custom`}
                     initial={{ opacity: 0, y: 24 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -126,11 +125,11 @@ export default function BlogSection() {
                         <Badge bg="primary" className="rounded-pill px-3 py-2">
                           {post.category}
                         </Badge>
-                        <span className={`small ${darkMode ? "text-light opacity-75" : "text-muted"}`}>{post.date}</span>
+                        <span className={`small `}>{post.date}</span>
                       </div>
 
                       <h3 className="h5 fw-bold mb-3">{post.title}</h3>
-                      <p className={`small mb-0 ${darkMode ? "text-light opacity-75" : "text-muted"}`}>{post.excerpt}</p>
+                      <p className={`small mb-0 `}>{post.excerpt}</p>
                     </div>
                   </motion.article>
                 </Link>

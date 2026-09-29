@@ -9,19 +9,10 @@ import { projects } from "@/data/projects";
 import { useTheme } from "next-themes";
 
 export default function ProjectsSection() {
-  const [mounted, setMounted] = useState(false);
-  const { resolvedTheme } = useTheme();
-
-  useEffect(() => setMounted(true), []);
-
-  const darkMode = mounted ? resolvedTheme === "dark" : true;
-
   return (
     <motion.section
       id="projects"
-      className={`text-center py-5 position-relative overflow-hidden ${
-        darkMode ? "bg-dark text-light" : "bg-light text-dark"
-      }`}
+      className="text-center py-5 position-relative overflow-hidden"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
@@ -32,10 +23,8 @@ export default function ProjectsSection() {
           <h2 className="fw-bold text-primary fs-2">Projects</h2>
 
           <p
-            className={`mt-3 mb-0 mx-auto ${
-              darkMode ? "text-light opacity-75" : "text-muted"
-            }`}
-            style={{ maxWidth: 700 }}
+            className="mt-3 mb-0 mx-auto"
+            style={{ maxWidth: 700, color: "var(--color-secondary)" }}
           >
             Built systems for health, operations, and government reporting with
             clean interfaces, better navigation, and fast feedback loops.
@@ -46,15 +35,11 @@ export default function ProjectsSection() {
           {projects.map((p, i) => (
             <Col key={p.id} lg={4} md={6} sm={12} className="d-flex">
               <motion.article
-                className={`project-card-custom rounded-4 overflow-hidden border-0 d-flex flex-column w-100 ${
-                  darkMode ? "project-card-dark text-light" : "project-card-light text-dark"
-                }`}
+                className="project-card-custom rounded-4 overflow-hidden border-0 d-flex flex-column w-100"
                 whileHover={{
                   y: -8,
                   scale: 1.02,
-                  boxShadow: darkMode
-                    ? "0 20px 50px rgba(0, 123, 255, 0.25)"
-                    : "0 20px 55px rgba(13, 110, 253, 0.18)",
+                  boxShadow: "0 20px 50px rgba(37, 99, 235, 0.15)",
                 }}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -87,9 +72,8 @@ export default function ProjectsSection() {
                       <h5 className="fw-bold mb-2 project-title">{p.title}</h5>
 
                       <p
-                        className={`small mb-3 project-desc ${
-                          darkMode ? "text-light opacity-75" : "text-muted"
-                        }`}
+                        className="small mb-3 project-desc"
+                        style={{ color: "var(--color-secondary)" }}
                       >
                         {p.desc}
                       </p>
@@ -115,9 +99,7 @@ export default function ProjectsSection() {
                         {p.tags.map((tag) => (
                           <span
                             key={tag}
-                            className={`project-tag px-3 py-1 rounded-pill small ${
-                              darkMode ? "project-tag-dark" : "project-tag-light"
-                            }`}
+                            className="project-tag px-3 py-1 rounded-pill small"
                           >
                             {tag}
                           </span>
@@ -131,9 +113,7 @@ export default function ProjectsSection() {
                       </span>
 
                       <span
-                        className={`project-badge rounded-circle d-inline-flex align-items-center justify-content-center ${
-                          darkMode ? "project-badge-dark" : "project-badge-light"
-                        }`}
+                        className="project-badge rounded-circle d-inline-flex align-items-center justify-content-center"
                         aria-hidden="true"
                       >
                         <FaArrowRight />

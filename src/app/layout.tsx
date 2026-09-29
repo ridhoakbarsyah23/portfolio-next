@@ -3,11 +3,16 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Archivo, Space_Grotesk } from "next/font/google";
 
-const plusJakartaSans = Plus_Jakarta_Sans({
+const archivo = Archivo({
   subsets: ["latin"],
-  variable: "--font-plus-jakarta-sans",
+  variable: "--font-archivo",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
 });
 
 export const metadata: Metadata = {
@@ -62,8 +67,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={plusJakartaSans.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+      <body className={`${spaceGrotesk.className} ${archivo.variable} ${spaceGrotesk.variable}`}>
+        <ThemeProvider attribute="data-bs-theme" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}
         </ThemeProvider>
       </body>

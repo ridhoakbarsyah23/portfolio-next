@@ -9,16 +9,15 @@ export default function FooterSection() {
   const [mounted, setMounted] = useState(false);
   const { resolvedTheme } = useTheme();
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => { setMounted(true); }, []);
 
-  const darkMode = mounted ? resolvedTheme === "dark" : true;
-
+  
   return (
 
     <footer
       className="mt-5 pt-4"
       style={{
-        background: darkMode ? "linear-gradient(180deg,#0b1220,#071022)" : "linear-gradient(180deg,#fff,#f8f9fb)",
+        background: "var(--color-card)",
       }}
     >
       <Container className="py-4 text-center">
@@ -27,7 +26,7 @@ export default function FooterSection() {
             href="https://linkedin.com/in/ridhoakbarsyah"
             target="_blank"
             rel="noopener noreferrer"
-            className={`text-decoration-none ${darkMode ? "text-light" : "text-dark"}`}
+            className="text-decoration-none"
             style={{ fontSize: 22 }}
             aria-label="LinkedIn"
           >
@@ -37,7 +36,7 @@ export default function FooterSection() {
             href="https://github.com/ridhoakbarsyah23"
             target="_blank"
             rel="noopener noreferrer"
-            className={`text-decoration-none ${darkMode ? "text-light" : "text-dark"}`}
+            className="text-decoration-none"
             style={{ fontSize: 22 }}
             aria-label="GitHub"
           >
@@ -47,7 +46,7 @@ export default function FooterSection() {
             href="https://www.instagram.com/ridhoakbarsyah_?igsh=MWd0aTlhZmZqZjR0eg=="
             target="_blank"
             rel="noopener noreferrer"
-            className={`text-decoration-none ${darkMode ? "text-light" : "text-dark"}`}
+            className="text-decoration-none"
             style={{ fontSize: 22 }}
             aria-label="Instagram"
           >
@@ -55,7 +54,7 @@ export default function FooterSection() {
           </a>
         </div>
 
-        <p className="mb-0 small" style={{ color: darkMode ? "#9aa4b2" : "#6c757d" }}>
+        <p className="mb-0 small" style={{ color: "var(--color-secondary)" }}>
           (c) {new Date().getFullYear()} - <strong>Ridho Akbarsyah Ramadhan</strong>
         </p>
       </Container>

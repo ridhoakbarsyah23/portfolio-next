@@ -1,17 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Container, Row, Col } from "react-bootstrap";
 import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaPhp, FaLaravel, FaGitAlt, FaFigma } from "react-icons/fa";
 import { SiMysql } from "react-icons/si";
-import { useTheme } from "next-themes";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export default function SkillsSection() {
-  const [mounted, setMounted] = useState(false);
-  const { resolvedTheme } = useTheme();
-
-  useEffect(() => { setMounted(true); }, []);
+  const { language } = useLanguage();
 
   const skills = [
     { name: "HTML", icon: <FaHtml5 color="#e34f26" /> },
@@ -28,7 +24,7 @@ export default function SkillsSection() {
   return (
     <motion.section id="skills" className="text-center py-5 position-relative overflow-hidden" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
       <Container>
-        <h2 className="fw-bold mb-5 text-primary fs-2 position-relative z-2">My Skills</h2>
+        <h2 className="fw-bold mb-5 text-primary fs-2 position-relative z-2">{language === "id" ? "Keahlian Saya" : "My Skills"}</h2>
 
         <Row className="g-4 justify-content-center">
           {skills.map((skill, i) => (

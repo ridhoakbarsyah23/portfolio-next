@@ -1,17 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
 import { FaLinkedin, FaGithub, FaInstagram } from "react-icons/fa";
-import { useTheme } from "next-themes";
 
 export default function FooterSection() {
-  const [mounted, setMounted] = useState(false);
-  const { resolvedTheme } = useTheme();
-
-  useEffect(() => { setMounted(true); }, []);
-
-  
   return (
 
     <footer

@@ -1,14 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Container, Row, Col } from "react-bootstrap";
 import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa";
-import { projects } from "@/data/projects";
-import { useTheme } from "next-themes";
+import { getProjectContent, projects } from "@/data/projects";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export default function ProjectsSection() {
+  const { language } = useLanguage();
+
   return (
     <motion.section
       id="projects"
@@ -20,19 +21,23 @@ export default function ProjectsSection() {
     >
       <Container className="position-relative" style={{ zIndex: 2 }}>
         <div className="d-flex flex-column align-items-center mb-4">
-          <h2 className="fw-bold text-primary fs-2">Projects</h2>
+          <h2 className="fw-bold text-primary fs-2">{language === "id" ? "Proyek" : "Projects"}</h2>
 
           <p
             className="mt-3 mb-0 mx-auto"
             style={{ maxWidth: 700, color: "var(--color-secondary)" }}
           >
-            Built systems for health, operations, and government reporting with
-            clean interfaces, better navigation, and fast feedback loops.
+            {language === "id"
+              ? "Membangun sistem kesehatan, operasional, dan pelaporan pemerintahan dengan antarmuka yang rapi, navigasi yang lebih baik, dan proses umpan balik yang cepat."
+              : "Built systems for health, operations, and government reporting with clean interfaces, better navigation, and fast feedback loops."}
           </p>
         </div>
 
         <Row className="justify-content-center g-4 align-items-stretch">
-          {projects.map((p, i) => (
+          {projects.map((p, i) => {
+            const content = getProjectContent(p, language);
+
+            return (
             <Col key={p.id} lg={4} md={6} sm={12} className="d-flex">
               <motion.article
                 className="project-card-custom rounded-4 overflow-hidden border-0 d-flex flex-column w-100"
@@ -52,46 +57,52 @@ export default function ProjectsSection() {
                   damping: 18,
                 }}
               >
-                <Link href={`/projects/${p.id}`} className="project-card-link text-decoration-none d-flex flex-column h-100" aria-label={`Read case study for ${p.title}`}>
+                <Link href={`/projects/${p.id}`} className="project-card-link text-decoration-none d-flex flex-column h-100" aria-label={language === "id" ? `Baca detail proyek ${content.title}` : `Read project details for ${content.title}`}>
                   <div className="position-relative overflow-hidden project-image-wrapper">
-                    <motion.img
-                      src={p.image}
-                      alt={p.title}
-                      className="w-100 project-card-image"
-                      whileHover={{ scale: 1.06 }}
-                      transition={{ duration: 0.45 }}
-                    />
+                    {p.image ? (
+                      <motion.img
+                        src={p.image}
+                        alt={content.title}
+                        className="w-100 project-card-image"
+                        whileHover={{ scale: 1.06 }}
+                        transition={{ duration: 0.45 }}
+                      />
+                    ) : (
+                      <div className="project-image-placeholder h-100 d-flex align-items-center justify-content-center p-4 text-center">
+                        <span>{content.title}</span>
+                      </div>
+                    )}
 
                     <div className="project-card-category d-inline-flex align-items-center justify-content-center position-absolute top-0 end-0 m-3 rounded-pill px-3 py-1 text-white fw-semibold">
-                      {p.category}
+                      {content.category}
                     </div>
                   </div>
 
                   <div className="p-4 d-flex flex-column flex-grow-1">
                     <div>
-                      <h5 className="fw-bold mb-2 project-title">{p.title}</h5>
+                      <h5 className="fw-bold mb-2 project-title">{content.title}</h5>
 
                       <p
                         className="small mb-3 project-desc"
                         style={{ color: "var(--color-secondary)" }}
                       >
-                        {p.desc}
+                        {content.desc}
                       </p>
 
                       <div className="project-proof-list text-start mb-3">
                         <div className="project-proof-item">
-                          <span className="project-proof-label">Role</span>
-                          <p className="mb-0">{p.role}</p>
+                          <span className="project-proof-label">{language === "id" ? "Peran" : "Role"}</span>
+                          <p className="mb-0">{content.role}</p>
                         </div>
 
                         <div className="project-proof-item">
-                          <span className="project-proof-label">Problem</span>
-                          <p className="mb-0">{p.problem}</p>
+                          <span className="project-proof-label">{language === "id" ? "Konteks" : "Context"}</span>
+                          <p className="mb-0">{content.organization}</p>
                         </div>
 
                         <div className="project-proof-item">
-                          <span className="project-proof-label">Impact</span>
-                          <p className="mb-0">{p.impact}</p>
+                          <span className="project-proof-label">{language === "id" ? "Periode" : "Period"}</span>
+                          <p className="mb-0">{content.period}</p>
                         </div>
                       </div>
 
@@ -109,7 +120,7 @@ export default function ProjectsSection() {
 
                     <div className="mt-auto d-flex justify-content-between align-items-center gap-3 pt-4 project-footer">
                       <span className="small text-primary fw-semibold">
-                        Read case study
+                        {language === "id" ? "Baca studi kasus" : "Read case study"}
                       </span>
 
                       <span
@@ -123,7 +134,8 @@ export default function ProjectsSection() {
                 </Link>
               </motion.article>
             </Col>
-          ))}
+            );
+          })}
         </Row>
       </Container>
 
@@ -158,6 +170,16 @@ export default function ProjectsSection() {
           height: 220px;
           object-fit: cover;
           display: block;
+        }
+
+        .project-image-placeholder {
+          background:
+            radial-gradient(circle at 20% 20%, rgba(96, 165, 250, 0.35), transparent 38%),
+            linear-gradient(135deg, #0f172a, #1d4ed8);
+          color: #ffffff;
+          font-size: 1.25rem;
+          font-weight: 700;
+          letter-spacing: -0.02em;
         }
 
         .project-card-category {

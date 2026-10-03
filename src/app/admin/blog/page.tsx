@@ -1,15 +1,43 @@
 "use client";
 
-import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
-import { Alert, Badge, Button, Container, Form, Spinner, Table, Tab, Tabs } from "react-bootstrap";
-import { FaEdit, FaPlus, FaSave, FaTrash, FaArrowLeft, FaKey } from "react-icons/fa";
-import { motion, AnimatePresence } from "framer-motion";
-import { readJsonResponse } from "@/lib/readJsonResponse";
-import type { BlogPost } from "@/types/blog";
+import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Fira_Sans, Fira_Code } from "next/font/google";
+import Link from "next/link";
+
+const firaSans = Fira_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+const firaCode = Fira_Code({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+import { Alert, Badge, Button, Form, Spinner, Tab, Tabs, Modal } from "react-bootstrap";
+import {
+  FaArrowLeft,
+  FaCheckCircle,
+  FaEdit,
+  FaFileAlt,
+  FaKey,
+  FaPlus,
+  FaRegClock,
+  FaSave,
+  FaSignOutAlt,
+  FaTrash,
+  FaEye,
+  FaEyeSlash,
+} from "react-icons/fa";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { readJsonResponse } from "@/lib/readJsonResponse";
+import type { BlogPost } from "@/types/blog";
+import styles from "./page.module.css";
 
-const emptyPost: BlogPost = {
+const createEmptyPost = (): BlogPost => ({
   id: "",
   title: "",
   category: "General",
@@ -18,7 +46,7 @@ const emptyPost: BlogPost = {
   content: "",
   image: "/images-blog/blog-1.jpg",
   published: true,
-};
+});
 
 const defaultCategories = ["General", "Frontend", "Workflow", "Design"];
 const newCategoryValue = "__new_category__";
@@ -27,22 +55,27 @@ type ViewMode = "list" | "form";
 
 export default function AdminBlogPage() {
   const [adminKey, setAdminKey] = useState("");
+  const [authenticated, setAuthenticated] = useState(false);
   const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [form, setForm] = useState<BlogPost>(emptyPost);
+  const [form, setForm] = useState<BlogPost>(createEmptyPost);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  
+  const [showValidation, setShowValidation] = useState(false);
   const [extraCategories, setExtraCategories] = useState<string[]>([]);
   const [categoryMode, setCategoryMode] = useState<"select" | "new">("select");
   const [newCategory, setNewCategory] = useState("");
-  
-  // New UI states
   const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [activeTab, setActiveTab] = useState<string>("write");
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [postToDelete, setPostToDelete] = useState<BlogPost | null>(null);
+  const errorRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
 
-  const isEditing = useMemo(() => Boolean(form.id), [form.id]);
+  const isEditing = Boolean(form.id);
   const selectedCategory = categoryMode === "new" ? newCategory.trim() : form.category.trim();
   const titleIsValid = form.title.trim().length >= 5;
   const excerptIsValid = form.excerpt.trim().length >= 20;
@@ -52,7 +85,22 @@ export default function AdminBlogPage() {
   const imageValue = form.image.trim();
   const imageUrlIsValid = !imageValue || imageValue.startsWith("/") || imageValue.startsWith("http://") || imageValue.startsWith("https://");
   const formIsValid = titleIsValid && excerptIsValid && contentIsValid && categoryIsValid && dateIsValid && imageUrlIsValid;
-  
+
+  const publishedCount = useMemo(() => posts.filter((post) => post.published).length, [posts]);
+  const draftCount = posts.length - publishedCount;
+
+  const invalidFields = useMemo(
+    () => [
+      !titleIsValid && { id: "post-title", label: "Judul minimal 5 karakter" },
+      !excerptIsValid && { id: "post-excerpt", label: "Ringkasan minimal 20 karakter" },
+      !categoryIsValid && { id: "post-category", label: "Kategori wajib diisi" },
+      !dateIsValid && { id: "post-date", label: "Tanggal wajib diisi" },
+      !imageUrlIsValid && { id: "post-image", label: "Format URL gambar tidak valid" },
+      !contentIsValid && { id: "post-content", label: "Konten minimal 10 karakter" },
+    ].filter((field): field is { id: string; label: string } => Boolean(field)),
+    [categoryIsValid, contentIsValid, dateIsValid, excerptIsValid, imageUrlIsValid, titleIsValid],
+  );
+
   const categories = useMemo(() => {
     const values = [...defaultCategories, ...posts.map((post) => post.category), ...extraCategories]
       .map((category) => category.trim())
@@ -87,8 +135,10 @@ export default function AdminBlogPage() {
 
       const data = await readJsonResponse<BlogPost[]>(response);
       setPosts(data || []);
+      setAuthenticated(true);
       sessionStorage.setItem("blog-admin-key", key);
     } catch (err) {
+      setAuthenticated(false);
       setError(err instanceof Error ? err.message : "Gagal memuat blog.");
     } finally {
       setLoading(false);
@@ -104,25 +154,40 @@ export default function AdminBlogPage() {
     }
   }, [loadPosts]);
 
-  const openForm = (post?: BlogPost) => {
-    if (post) {
-      setForm(post);
-    } else {
-      setForm({
-        ...emptyPost,
-        date: new Date().toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" }),
-      });
+  useEffect(() => {
+    if (error) {
+      errorRef.current?.focus();
     }
+  }, [error]);
+
+  const openForm = (post?: BlogPost) => {
+    setForm(post ? { ...post } : createEmptyPost());
     setCategoryMode("select");
     setNewCategory("");
     setActiveTab("write");
     setViewMode("form");
+    setShowValidation(false);
     setMessage("");
     setError("");
   };
 
   const closeForm = () => {
     setViewMode("list");
+    setShowValidation(false);
+    setError("");
+  };
+
+  const handleSignOutClick = () => setShowLogoutModal(true);
+
+  const confirmSignOut = () => {
+    sessionStorage.removeItem("blog-admin-key");
+    setAdminKey("");
+    setAuthenticated(false);
+    setPosts([]);
+    setViewMode("list");
+    setMessage("");
+    setError("");
+    setShowLogoutModal(false);
   };
 
   const addCategory = () => {
@@ -131,8 +196,8 @@ export default function AdminBlogPage() {
       setError("Nama kategori tidak boleh kosong.");
       return;
     }
-    setExtraCategories((currentCategories) => (currentCategories.includes(category) ? currentCategories : [...currentCategories, category]));
-    setForm({ ...form, category });
+    setExtraCategories((current) => (current.includes(category) ? current : [...current, category]));
+    setForm((current) => ({ ...current, category }));
     setCategoryMode("select");
     setNewCategory("");
     setError("");
@@ -140,6 +205,7 @@ export default function AdminBlogPage() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setShowValidation(true);
 
     if (!adminKey) {
       setError("Masukkan admin key terlebih dahulu.");
@@ -147,7 +213,7 @@ export default function AdminBlogPage() {
     }
 
     if (!formIsValid) {
-      setError("Lengkapi field wajib dan pastikan format data sudah benar.");
+      setError("Periksa kembali field yang ditandai sebelum menyimpan artikel.");
       return;
     }
 
@@ -157,7 +223,7 @@ export default function AdminBlogPage() {
 
     try {
       if (categoryMode === "new") {
-        setExtraCategories((currentCategories) => (currentCategories.includes(selectedCategory) ? currentCategories : [...currentCategories, selectedCategory]));
+        setExtraCategories((current) => (current.includes(selectedCategory) ? current : [...current, selectedCategory]));
       }
 
       const payload = {
@@ -181,8 +247,9 @@ export default function AdminBlogPage() {
       }
 
       await loadPosts(adminKey);
-      setMessage(isEditing ? "Blog berhasil diperbarui." : "Blog baru berhasil dibuat.");
-      closeForm();
+      setMessage(isEditing ? "Artikel berhasil diperbarui." : "Artikel baru berhasil dibuat.");
+      setViewMode("list");
+      setShowValidation(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Gagal menyimpan blog.");
     } finally {
@@ -190,310 +257,334 @@ export default function AdminBlogPage() {
     }
   };
 
-  const handleDelete = async (post: BlogPost) => {
-    const confirmed = window.confirm(`Hapus blog "${post.title}"?`);
-    if (!confirmed) return;
+  const handleDeleteClick = (post: BlogPost) => {
+    setPostToDelete(post);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!postToDelete) return;
 
     setError("");
     setMessage("");
 
     try {
-      const response = await fetch(`/api/blog?id=${encodeURIComponent(post.id)}`, {
+      const response = await fetch(`/api/blog?id=${encodeURIComponent(postToDelete.id)}`, {
         method: "DELETE",
         headers,
       });
 
       if (!response.ok) {
-        throw new Error("Gagal menghapus blog.");
+        throw new Error("Gagal menghapus artikel.");
       }
 
       await loadPosts(adminKey);
-      setMessage("Blog berhasil dihapus.");
+      setMessage("Artikel berhasil dihapus.");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Gagal menghapus blog.");
+      setError(err instanceof Error ? err.message : "Gagal menghapus artikel.");
+    } finally {
+      setShowDeleteModal(false);
+      setPostToDelete(null);
     }
   };
 
+  const motionProps = reduceMotion
+    ? { initial: false as const }
+    : { initial: { opacity: 0, y: 8 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -6 }, transition: { duration: 0.2 } };
+
   return (
-    <main className="admin-blog-page bg-dark text-light min-vh-100 py-5">
-      <Container>
-        <div className="mb-4">
-          <p className="text-info fw-semibold text-uppercase small mb-2">Dashboard</p>
-          <h1 className="fw-bold mb-2">Manage Blog</h1>
-          <p className="text-secondary mb-0">Tambah, edit, publish, atau hapus artikel yang tampil di section blog portfolio.</p>
+    <main className={`${styles.page} ${firaSans.className}`}>
+      <header className={styles.topbar}>
+        <div className={styles.shell}>
+          <Link href="/" className={styles.brand} aria-label="Kembali ke portfolio">
+            Ridho<span>.</span>
+          </Link>
+
+          <div className={styles.topbarActions}>
+            {authenticated && (
+              <span className={styles.sessionStatus}>
+                <FaCheckCircle aria-hidden="true" /> Sesi aktif
+              </span>
+            )}
+            <Link href="/" className={styles.backLink}>
+              <FaArrowLeft aria-hidden="true" /> Portfolio
+            </Link>
+            {authenticated && (
+              <button type="button" className={styles.iconButton} onClick={handleSignOutClick} aria-label="Keluar dari sesi admin" title="Keluar dari sesi admin">
+                <FaSignOutAlt aria-hidden="true" />
+              </button>
+            )}
+          </div>
+        </div>
+      </header>
+
+      <div className={`${styles.shell} ${styles.content}`}>
+        <div className={styles.pageHeading}>
+          <div>
+            <p className={styles.eyebrow}>Portfolio CMS</p>
+            <h1>{viewMode === "form" ? (isEditing ? "Edit artikel" : "Artikel baru") : "Kelola blog"}</h1>
+            <p>{viewMode === "form" ? "Tulis, tinjau, dan atur publikasi dalam satu ruang kerja." : "Kelola konten yang tampil pada bagian blog portfolio."}</p>
+          </div>
+          {authenticated && viewMode === "list" && (
+            <Button className={styles.primaryButton} onClick={() => openForm()}>
+              <FaPlus aria-hidden="true" /> Tulis artikel
+            </Button>
+          )}
         </div>
 
-        {message && <Alert variant="success" className="bg-success text-white border-0 shadow-sm">{message}</Alert>}
-        {error && <Alert variant="danger" className="bg-danger text-white border-0 shadow-sm">{error}</Alert>}
-
-        {/* Authentication Panel (Always visible if no key or error loading) */}
-        {!posts.length && !loading && (
-          <section className="admin-panel bg-black bg-opacity-50 border border-secondary rounded-4 p-4 shadow-sm mb-4" style={{ maxWidth: 500 }}>
-            <h2 className="h5 fw-bold mb-3 d-flex align-items-center gap-2"><FaKey /> Admin Access</h2>
-            <Form onSubmit={(e) => { e.preventDefault(); loadPosts(adminKey); }}>
-              <Form.Group className="mb-3">
-                <Form.Label>Admin Key</Form.Label>
-                <Form.Control
-                  type="password"
-                  className="bg-dark text-light border-secondary"
-                  value={adminKey}
-                  onChange={(e) => setAdminKey(e.target.value)}
-                  placeholder="Masukkan admin key"
-                />
-              </Form.Group>
-              <Button type="submit" variant="info" className="w-100 rounded-pill fw-semibold" disabled={loading || !adminKey}>
-                {loading ? <Spinner size="sm" /> : "Load Blog Data"}
-              </Button>
-            </Form>
-          </section>
+        {message && (
+          <Alert variant="success" className={styles.feedback} role="status">
+            <FaCheckCircle aria-hidden="true" /> {message}
+          </Alert>
+        )}
+        {error && (
+          <Alert ref={errorRef} tabIndex={-1} variant="danger" className={styles.feedback} role="alert">
+            <strong>Ada yang perlu diperiksa.</strong>
+            <span>{error}</span>
+            {showValidation && invalidFields.length > 0 && (
+              <ul>
+                {invalidFields.map((field) => (
+                  <li key={field.id}><a href={`#${field.id}`}>{field.label}</a></li>
+                ))}
+              </ul>
+            )}
+          </Alert>
         )}
 
-        <AnimatePresence mode="wait">
-          {viewMode === "list" ? (
-            <motion.div 
-              key="list-view"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
-            >
-              <section className="admin-panel bg-black bg-opacity-25 border border-secondary rounded-4 p-4 shadow-sm">
-                <div className="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
-                  <div className="d-flex align-items-center gap-3">
-                    <h2 className="h5 fw-bold mb-0">Semua Artikel</h2>
-                    <Badge bg="info" className="rounded-pill px-3 py-2 text-dark">
-                      {posts.length} Posts
-                    </Badge>
-                  </div>
-                  <Button variant="info" className="rounded-pill px-4 d-inline-flex align-items-center gap-2 fw-semibold" onClick={() => openForm()} disabled={!adminKey || posts.length === 0 && loading}>
-                    <FaPlus /> Tulis Artikel Baru
-                  </Button>
-                </div>
+        {!authenticated ? (
+          <section className={styles.authLayout} aria-labelledby="admin-access-title">
+            <div className={styles.authIntro}>
+              <span className={styles.iconTile}><FaFileAlt aria-hidden="true" /></span>
+              <h2>Ruang kerja editorial</h2>
+              <p>Masuk menggunakan admin key untuk mengelola artikel portfolio. Key hanya disimpan selama sesi browser berlangsung.</p>
+              <ul>
+                <li>Kelola artikel terbit dan draft</li>
+                <li>Tulis konten dengan Markdown</li>
+                <li>Tinjau artikel sebelum dipublikasikan</li>
+              </ul>
+            </div>
 
-                <div className="table-responsive">
-                  <Table hover variant="dark" className="align-middle mb-0" style={{ backgroundColor: 'transparent' }}>
-                    <thead className="text-secondary">
-                      <tr>
-                        <th className="border-secondary fw-semibold">Title</th>
-                        <th className="border-secondary fw-semibold">Category</th>
-                        <th className="border-secondary fw-semibold">Status</th>
-                        <th className="border-secondary text-end fw-semibold">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {posts.map((post) => (
-                        <tr key={post.id}>
-                          <td className="border-secondary">
-                            <div className="fw-semibold">{post.title}</div>
-                            <div className="small text-secondary">{post.date}</div>
-                          </td>
-                          <td className="border-secondary text-info">{post.category}</td>
-                          <td className="border-secondary">
-                            <Badge bg={post.published ? "success" : "secondary"}>{post.published ? "Published" : "Draft"}</Badge>
-                          </td>
-                          <td className="border-secondary text-end">
-                            <div className="d-inline-flex gap-2">
-                              <Button size="sm" variant="outline-info" className="rounded-pill px-3" onClick={() => openForm(post)} aria-label={`Edit ${post.title}`}>
-                                <FaEdit /> Edit
-                              </Button>
-                              <Button size="sm" variant="outline-danger" className="rounded-pill px-3" onClick={() => handleDelete(post)} aria-label={`Delete ${post.title}`}>
-                                <FaTrash /> Hapus
-                              </Button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-
-                      {posts.length === 0 && adminKey && !loading && (
-                        <tr>
-                          <td colSpan={4} className="text-center text-secondary py-5 border-secondary">
-                            Belum ada artikel. Klik &quot;Tulis Artikel Baru&quot; untuk memulai.
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </Table>
-                </div>
-              </section>
-            </motion.div>
-          ) : (
-            <motion.div 
-              key="form-view"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <section className="admin-panel bg-black bg-opacity-50 border border-secondary rounded-4 p-4 shadow-lg">
-                <div className="d-flex align-items-center justify-content-between mb-4 border-bottom border-secondary pb-3">
-                  <h2 className="h4 fw-bold mb-0">{isEditing ? "Edit Artikel" : "Tulis Artikel Baru"}</h2>
-                  <Button variant="outline-secondary" className="rounded-pill d-inline-flex align-items-center gap-2" onClick={closeForm}>
-                    <FaArrowLeft /> Kembali
-                  </Button>
-                </div>
-
-                <Form onSubmit={handleSubmit}>
-                  <div className="row g-4 mb-4">
-                    <div className="col-lg-8">
-                      <Form.Group className="mb-3">
-                        <Form.Label className="text-info fw-semibold">Title <span className="text-danger">*</span></Form.Label>
-                        <Form.Control 
-                          className="bg-dark text-light border-secondary fs-5 py-2"
-                          value={form.title} 
-                          onChange={(e) => setForm({ ...form, title: e.target.value })} 
-                          required minLength={5} 
-                          isInvalid={Boolean(form.title) && !titleIsValid} 
-                          placeholder="Judul artikel yang menarik..."
-                        />
-                        <Form.Control.Feedback type="invalid">Minimal 5 karakter.</Form.Control.Feedback>
-                      </Form.Group>
-
-                      <Form.Group className="mb-3">
-                        <Form.Label className="text-info fw-semibold">Excerpt <span className="text-danger">*</span></Form.Label>
-                        <Form.Control
-                          as="textarea"
-                          className="bg-dark text-light border-secondary"
-                          rows={2}
-                          value={form.excerpt}
-                          onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
-                          required
-                          minLength={20}
-                          isInvalid={Boolean(form.excerpt) && !excerptIsValid}
-                          placeholder="Ringkasan singkat artikel..."
-                        />
-                        <Form.Control.Feedback type="invalid">Minimal 20 karakter.</Form.Control.Feedback>
-                      </Form.Group>
-                    </div>
-
-                    <div className="col-lg-4">
-                      <Form.Group className="mb-3">
-                        <Form.Label className="text-info fw-semibold">Category <span className="text-danger">*</span></Form.Label>
-                        <Form.Select
-                          className="bg-dark text-light border-secondary"
-                          value={categoryMode === "new" ? newCategoryValue : form.category}
-                          onChange={(e) => {
-                            if (e.target.value === newCategoryValue) {
-                              setCategoryMode("new");
-                              setNewCategory("");
-                              return;
-                            }
-                            setCategoryMode("select");
-                            setForm({ ...form, category: e.target.value });
-                          }}
-                          required
-                        >
-                          {categories.map((category) => (
-                            <option key={category} value={category}>{category}</option>
-                          ))}
-                          <option value={newCategoryValue}>+ Add new category</option>
-                        </Form.Select>
-                        {categoryMode === "new" && (
-                          <div className="d-flex gap-2 mt-2">
-                            <Form.Control className="bg-dark text-light border-secondary" value={newCategory} onChange={(e) => setNewCategory(e.target.value)} placeholder="Nama kategori baru" />
-                            <Button type="button" variant="outline-info" onClick={addCategory}>Add</Button>
-                          </div>
-                        )}
-                      </Form.Group>
-
-                      <Form.Group className="mb-3">
-                        <Form.Label className="text-info fw-semibold">Date <span className="text-danger">*</span></Form.Label>
-                        <Form.Control className="bg-dark text-light border-secondary" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} required />
-                      </Form.Group>
-
-                      <Form.Group className="mb-3">
-                        <Form.Label className="text-info fw-semibold">Cover Image URL</Form.Label>
-                        <Form.Control className="bg-dark text-light border-secondary" value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} placeholder="/images-blog/blog-1.jpg" isInvalid={!imageUrlIsValid} />
-                        <Form.Control.Feedback type="invalid">Gunakan path lokal /... atau URL http(s).</Form.Control.Feedback>
-                      </Form.Group>
-
-                      <div className="p-3 bg-dark border border-secondary rounded-3 mt-4">
-                        <Form.Check
-                          type="switch"
-                          id="published-switch"
-                          label={<span className="fw-semibold ms-2">{form.published ? "Status: Published" : "Status: Draft"}</span>}
-                          checked={form.published}
-                          onChange={(e) => setForm({ ...form, published: e.target.checked })}
-                          className="mb-0"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mb-4">
-                    <Tabs
-                      activeKey={activeTab}
-                      onSelect={(k) => setActiveTab(k || "write")}
-                      className="mb-3 admin-tabs"
+            <div className={styles.authCard}>
+              <div className={styles.cardHeading}>
+                <span className={styles.iconTile}><FaKey aria-hidden="true" /></span>
+                <div><h2 id="admin-access-title">Akses admin</h2><p>Masukkan key untuk melanjutkan.</p></div>
+              </div>
+              <Form onSubmit={(event) => { event.preventDefault(); loadPosts(adminKey); }}>
+                <Form.Group controlId="admin-key" className="mb-4">
+                  <Form.Label>Admin key</Form.Label>
+                  <div className="position-relative">
+                    <Form.Control
+                      type={showPassword ? "text" : "password"}
+                      value={adminKey}
+                      onChange={(event) => setAdminKey(event.target.value)}
+                      placeholder="Masukkan admin key"
+                      autoComplete="current-password"
+                      required
+                      style={{ paddingRight: "45px" }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className={styles.passwordToggle}
+                      aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
                     >
-                      <Tab eventKey="write" title="Write (Markdown)">
-                        <Form.Control
-                          as="textarea"
-                          className="bg-dark text-light border-secondary p-4 rounded-3"
-                          rows={15}
-                          value={form.content || ""}
-                          onChange={(e) => setForm({ ...form, content: e.target.value })}
-                          required
-                          minLength={10}
-                          isInvalid={Boolean(form.content) && !contentIsValid}
-                          style={{ fontFamily: "'Fira Code', monospace", fontSize: "15px", lineHeight: 1.6 }}
-                          placeholder="# Tulis artikel Anda di sini..."
-                        />
-                      </Tab>
-                      <Tab eventKey="preview" title="Preview">
-                        <div className="bg-dark border border-secondary p-4 rounded-3 markdown-preview markdown-content" style={{ minHeight: "350px" }}>
-                          {form.content ? (
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                              {form.content}
-                            </ReactMarkdown>
-                          ) : (
-                            <div className="text-secondary text-center py-5">Preview kosong. Mulai menulis di tab &quot;Write&quot;.</div>
-                          )}
-                        </div>
-                      </Tab>
-                    </Tabs>
+                      {showPassword ? <FaEyeSlash aria-hidden="true" /> : <FaEye aria-hidden="true" />}
+                    </button>
+                  </div>
+                  <Form.Text>Key tidak pernah ditampilkan pada halaman publik.</Form.Text>
+                </Form.Group>
+                <Button type="submit" className={`${styles.primaryButton} w-100`} disabled={loading || !adminKey.trim()}>
+                  {loading ? <><Spinner size="sm" aria-hidden="true" /> Memverifikasi...</> : <><FaKey aria-hidden="true" /> Masuk ke dashboard</>}
+                </Button>
+              </Form>
+            </div>
+          </section>
+        ) : (
+          <AnimatePresence mode="wait">
+            {viewMode === "list" ? (
+              <motion.div key="list" {...motionProps}>
+                <section className={styles.statsGrid} aria-label="Ringkasan artikel">
+                  <StatCard label="Total artikel" value={posts.length} icon={<FaFileAlt />} />
+                  <StatCard label="Dipublikasikan" value={publishedCount} icon={<FaCheckCircle />} tone="success" />
+                  <StatCard label="Draft" value={draftCount} icon={<FaRegClock />} tone="muted" />
+                </section>
+
+                <section className={styles.panel} aria-labelledby="article-list-title">
+                  <div className={styles.panelHeader}>
+                    <div><h2 id="article-list-title">Semua artikel</h2><p>Artikel terbaru ditampilkan lebih dahulu.</p></div>
+                    <Badge className={styles.countBadge}>{posts.length} artikel</Badge>
                   </div>
 
-                  <div className="d-flex gap-3 justify-content-end pt-3 border-top border-secondary">
-                    <Button type="button" variant="outline-secondary" className="rounded-pill px-4 fw-semibold" onClick={closeForm}>
-                      Batal
-                    </Button>
-                    <Button type="submit" variant="info" className="rounded-pill px-5 d-inline-flex align-items-center gap-2 fw-bold text-dark" disabled={saving || !formIsValid}>
-                      {isEditing ? <FaSave /> : <FaPlus />}
-                      {saving ? "Menyimpan..." : isEditing ? "Simpan Perubahan" : "Terbitkan Artikel"}
+                  {loading ? (
+                    <div className={styles.loadingState} role="status"><Spinner animation="border" size="sm" /> Memuat artikel...</div>
+                  ) : posts.length === 0 ? (
+                    <div className={styles.emptyState}>
+                      <span className={styles.iconTile}><FaFileAlt aria-hidden="true" /></span>
+                      <h3>Belum ada artikel</h3>
+                      <p>Buat artikel pertama untuk mulai mengisi blog portfolio.</p>
+                      <Button className={styles.primaryButton} onClick={() => openForm()}><FaPlus aria-hidden="true" /> Tulis artikel</Button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className={styles.tableWrap}>
+                        <table className={styles.articleTable}>
+                          <thead><tr><th>Artikel</th><th>Kategori</th><th>Status</th><th><span className="visually-hidden">Tindakan</span></th></tr></thead>
+                          <tbody>{posts.map((post) => <ArticleRow key={post.id} post={post} onEdit={openForm} onDelete={handleDeleteClick} />)}</tbody>
+                        </table>
+                      </div>
+                      <div className={styles.mobileList}>{posts.map((post) => <ArticleCard key={post.id} post={post} onEdit={openForm} onDelete={handleDeleteClick} />)}</div>
+                    </>
+                  )}
+                </section>
+              </motion.div>
+            ) : (
+              <motion.div key="form" {...motionProps}>
+                <Form noValidate onSubmit={handleSubmit}>
+                  <div className={styles.editorGrid}>
+                    <section className={styles.panel} aria-labelledby="content-heading">
+                      <div className={styles.panelHeader}><div><h2 id="content-heading">Konten artikel</h2><p>Informasi utama yang akan dibaca pengunjung.</p></div></div>
+                      <Form.Group controlId="post-title" className="mb-4">
+                        <Form.Label>Judul artikel <span aria-hidden="true">*</span></Form.Label>
+                        <Form.Control value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} minLength={5} required isInvalid={showValidation && !titleIsValid} placeholder="Contoh: Membangun UI yang konsisten" />
+                        <Form.Control.Feedback type="invalid">Judul harus berisi minimal 5 karakter.</Form.Control.Feedback>
+                      </Form.Group>
+                      <Form.Group controlId="post-excerpt" className="mb-4">
+                        <Form.Label>Ringkasan <span aria-hidden="true">*</span></Form.Label>
+                        <Form.Control as="textarea" rows={3} value={form.excerpt} onChange={(event) => setForm({ ...form, excerpt: event.target.value })} minLength={20} required isInvalid={showValidation && !excerptIsValid} placeholder="Ringkasan singkat yang menjelaskan isi artikel..." />
+                        <div className={styles.fieldMeta}><Form.Text>Minimal 20 karakter.</Form.Text><span>{form.excerpt.length} karakter</span></div>
+                        <Form.Control.Feedback type="invalid">Ringkasan harus berisi minimal 20 karakter.</Form.Control.Feedback>
+                      </Form.Group>
+
+                      <Tabs activeKey={activeTab} onSelect={(key) => setActiveTab(key || "write")} className={styles.tabs}>
+                        <Tab eventKey="write" title="Tulis Markdown">
+                          <Form.Group controlId="post-content">
+                            <Form.Label className="visually-hidden">Konten artikel</Form.Label>
+                            <Form.Control as="textarea" className={`${styles.editor} ${firaCode.className}`} rows={18} value={form.content || ""} onChange={(event) => setForm({ ...form, content: event.target.value })} minLength={10} required isInvalid={showValidation && !contentIsValid} placeholder="# Mulai menulis artikel..." />
+                            <Form.Control.Feedback type="invalid">Konten harus berisi minimal 10 karakter.</Form.Control.Feedback>
+                          </Form.Group>
+                        </Tab>
+                        <Tab eventKey="preview" title="Pratinjau">
+                          <div className={styles.preview}>
+                            {form.content ? <ReactMarkdown remarkPlugins={[remarkGfm]}>{form.content}</ReactMarkdown> : <p>Pratinjau akan muncul setelah kamu mulai menulis.</p>}
+                          </div>
+                        </Tab>
+                      </Tabs>
+                    </section>
+
+                    <aside className={styles.sidebar} aria-label="Pengaturan publikasi">
+                      <section className={styles.panel}>
+                        <div className={styles.panelHeader}><div><h2>Publikasi</h2><p>Atur metadata dan status artikel.</p></div></div>
+                        <Form.Group controlId="post-category" className="mb-4">
+                          <Form.Label>Kategori <span aria-hidden="true">*</span></Form.Label>
+                          <Form.Select value={categoryMode === "new" ? newCategoryValue : form.category} onChange={(event) => {
+                            if (event.target.value === newCategoryValue) { setCategoryMode("new"); setNewCategory(""); return; }
+                            setCategoryMode("select"); setForm({ ...form, category: event.target.value });
+                          }} isInvalid={showValidation && !categoryIsValid} required>
+                            {categories.map((category) => <option key={category} value={category}>{category}</option>)}
+                            <option value={newCategoryValue}>+ Kategori baru</option>
+                          </Form.Select>
+                          {categoryMode === "new" && (
+                            <div className={styles.inlineField}>
+                              <Form.Control value={newCategory} onChange={(event) => setNewCategory(event.target.value)} placeholder="Nama kategori" aria-label="Nama kategori baru" />
+                              <Button type="button" variant="outline-primary" onClick={addCategory}>Tambah</Button>
+                            </div>
+                          )}
+                          <Form.Control.Feedback type="invalid">Kategori wajib diisi.</Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group controlId="post-date" className="mb-4">
+                          <Form.Label>Tanggal <span aria-hidden="true">*</span></Form.Label>
+                          <Form.Control value={form.date} onChange={(event) => setForm({ ...form, date: event.target.value })} isInvalid={showValidation && !dateIsValid} required />
+                          <Form.Control.Feedback type="invalid">Tanggal wajib diisi.</Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group controlId="post-image" className="mb-4">
+                          <Form.Label>URL cover</Form.Label>
+                          <Form.Control value={form.image} onChange={(event) => setForm({ ...form, image: event.target.value })} placeholder="/images-blog/blog-1.jpg" isInvalid={showValidation && !imageUrlIsValid} />
+                          <Form.Text>Gunakan path lokal atau URL http(s).</Form.Text>
+                          <Form.Control.Feedback type="invalid">Format URL gambar tidak valid.</Form.Control.Feedback>
+                        </Form.Group>
+                        <div className={styles.publishToggle}>
+                          <Form.Check type="switch" id="published-switch" label={form.published ? "Dipublikasikan" : "Simpan sebagai draft"} checked={form.published} onChange={(event) => setForm({ ...form, published: event.target.checked })} />
+                          <small>{form.published ? "Artikel terlihat oleh pengunjung." : "Artikel hanya terlihat di dashboard."}</small>
+                        </div>
+                      </section>
+                    </aside>
+                  </div>
+
+                  <div className={styles.formActions}>
+                    <Button type="button" variant="outline-secondary" onClick={closeForm}><FaArrowLeft aria-hidden="true" /> Batal</Button>
+                    <Button type="submit" className={styles.primaryButton} disabled={saving}>
+                      {saving ? <><Spinner size="sm" aria-hidden="true" /> Menyimpan...</> : <>{isEditing ? <FaSave aria-hidden="true" /> : <FaPlus aria-hidden="true" />}{isEditing ? "Simpan perubahan" : "Simpan artikel"}</>}
                     </Button>
                   </div>
                 </Form>
-              </section>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </Container>
-      
-      {/* Styles for Tabs and Preview Mode */}
-      <style>{`
-        .admin-tabs .nav-link {
-          color: #6c757d;
-          border: none;
-          border-bottom: 2px solid transparent;
-          font-weight: 600;
-          padding: 0.5rem 1.5rem;
-        }
-        .admin-tabs .nav-link:hover {
-          color: #0dcaf0;
-        }
-        .admin-tabs .nav-link.active {
-          color: #0dcaf0;
-          background-color: transparent;
-          border-color: #0dcaf0;
-        }
-        /* Resets for preview markdown similar to blog detail */
-        .markdown-preview h1, .markdown-preview h2 { font-weight: 700; margin-top: 1.5rem; margin-bottom: 1rem; }
-        .markdown-preview p { margin-bottom: 1rem; }
-        .markdown-preview pre { background: #1a1d20; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; overflow-x: auto;}
-        .markdown-preview code { color: #ff79c6; }
-        .markdown-preview blockquote { border-left: 4px solid #0dcaf0; padding-left: 1rem; color: #adb5bd; }
-        .markdown-preview img { max-width: 100%; border-radius: 8px; }
-      `}</style>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        )}
+      </div>
+
+      <Modal show={showLogoutModal} onHide={() => setShowLogoutModal(false)} centered contentClassName={styles.glassModal}>
+        <Modal.Header closeButton closeVariant="white" className={styles.glassModalHeader}>
+          <Modal.Title className={styles.glassModalTitle}>Konfirmasi Keluar</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Apakah Anda yakin ingin keluar dari sesi admin? Anda perlu memasukkan admin key kembali untuk masuk.
+        </Modal.Body>
+        <Modal.Footer className={styles.glassModalFooter}>
+          <Button variant="outline-light" onClick={() => setShowLogoutModal(false)}>
+            Batal
+          </Button>
+          <Button variant="danger" onClick={confirmSignOut}>
+            Keluar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered contentClassName={styles.glassModal}>
+        <Modal.Header closeButton closeVariant="white" className={styles.glassModalHeader}>
+          <Modal.Title className={styles.glassModalTitle}>Hapus Artikel</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Apakah Anda yakin ingin menghapus artikel <strong>&quot;{postToDelete?.title}&quot;</strong>? Tindakan ini tidak dapat dibatalkan.
+        </Modal.Body>
+        <Modal.Footer className={styles.glassModalFooter}>
+          <Button variant="outline-light" onClick={() => setShowDeleteModal(false)}>
+            Batal
+          </Button>
+          <Button variant="danger" onClick={confirmDelete}>
+            <FaTrash aria-hidden="true" /> Hapus
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </main>
+  );
+}
+
+function StatCard({ label, value, icon, tone = "default" }: { label: string; value: number; icon: React.ReactNode; tone?: "default" | "success" | "muted" }) {
+  return <article className={`${styles.statCard} ${styles[tone]}`}><span aria-hidden="true">{icon}</span><div><strong>{value}</strong><p>{label}</p></div></article>;
+}
+
+function ArticleStatus({ published }: { published: boolean }) {
+  return <span className={`${styles.statusBadge} ${published ? styles.published : styles.draft}`}>{published ? <FaCheckCircle aria-hidden="true" /> : <FaRegClock aria-hidden="true" />}{published ? "Terbit" : "Draft"}</span>;
+}
+
+function ArticleRow({ post, onEdit, onDelete }: { post: BlogPost; onEdit: (post: BlogPost) => void; onDelete: (post: BlogPost) => void }) {
+  return (
+    <tr>
+      <td><strong>{post.title}</strong><span>{post.date}</span></td>
+      <td>{post.category}</td>
+      <td><ArticleStatus published={post.published} /></td>
+      <td><div className={styles.rowActions}><button type="button" onClick={() => onEdit(post)} aria-label={`Edit ${post.title}`}><FaEdit aria-hidden="true" /> Edit</button><button type="button" className={styles.deleteButton} onClick={() => onDelete(post)} aria-label={`Hapus ${post.title}`}><FaTrash aria-hidden="true" /> Hapus</button></div></td>
+    </tr>
+  );
+}
+
+function ArticleCard({ post, onEdit, onDelete }: { post: BlogPost; onEdit: (post: BlogPost) => void; onDelete: (post: BlogPost) => void }) {
+  return (
+    <article className={styles.articleCard}>
+      <div><ArticleStatus published={post.published} /><span className={styles.category}>{post.category}</span></div>
+      <h3>{post.title}</h3><p>{post.date}</p>
+      <div className={styles.rowActions}><button type="button" onClick={() => onEdit(post)}><FaEdit aria-hidden="true" /> Edit</button><button type="button" className={styles.deleteButton} onClick={() => onDelete(post)}><FaTrash aria-hidden="true" /> Hapus</button></div>
+    </article>
   );
 }

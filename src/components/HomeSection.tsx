@@ -1,21 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Container, Button, Modal } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { FaDownload, FaArrowRight, FaEye } from "react-icons/fa";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { useTheme } from "next-themes";
+import { useLanguage } from "@/components/LanguageProvider";
 
 const PDFViewer = dynamic(() => import("./PDFViewer"), { ssr: false });
 
 export default function HomeSection() {
-  const [mounted, setMounted] = useState(false);
-  const { resolvedTheme } = useTheme();
   const [showCV, setShowCV] = useState(false);
-
-  useEffect(() => { setMounted(true); }, []);
+  const { language } = useLanguage();
 
 
   return (
@@ -102,7 +99,7 @@ export default function HomeSection() {
               color: "var(--color-secondary)",
             }}
           >
-            Frontend Developer - Cilacap, Central Java
+            {language === "id" ? "Frontend Developer - Cilacap, Jawa Tengah" : "Frontend Developer - Cilacap, Central Java"}
           </motion.p>
 
           <motion.div
@@ -122,7 +119,7 @@ export default function HomeSection() {
                 fontWeight: 600,
               }}
             >
-              View Projects <FaArrowRight />
+              {language === "id" ? "Lihat Proyek" : "View Projects"} <FaArrowRight />
             </Button>
 
             <Button
@@ -132,7 +129,7 @@ export default function HomeSection() {
               style={{ fontWeight: 600 }}
               onClick={() => setShowCV(true)}
             >
-              <FaEye /> View CV
+              <FaEye /> {language === "id" ? "Lihat CV" : "View CV"}
             </Button>
           </motion.div>
         </motion.div>
@@ -148,10 +145,10 @@ export default function HomeSection() {
         </Modal.Body>
         <Modal.Footer style={{ background: "var(--color-card)", borderTop: "1px solid var(--color-border)" }}>
           <Button variant="secondary" onClick={() => setShowCV(false)}>
-            Close
+            {language === "id" ? "Tutup" : "Close"}
           </Button>
           <a href="/CV_Ridho_Akbarsyah_Ramadhan.pdf" download className="btn btn-primary d-flex align-items-center gap-2">
-            <FaDownload /> Download File
+            <FaDownload /> {language === "id" ? "Unduh File" : "Download File"}
           </a>
         </Modal.Footer>
       </Modal>

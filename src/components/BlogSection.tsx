@@ -6,7 +6,7 @@ import { Badge, Col, Container, Row, Spinner } from "react-bootstrap";
 import Link from "next/link";
 import { readJsonResponse } from "@/lib/readJsonResponse";
 import type { BlogPost } from "@/types/blog";
-import { useTheme } from "next-themes";
+import { useLanguage } from "@/components/LanguageProvider";
 
 const fallbackPosts: BlogPost[] = [
   {
@@ -39,10 +39,7 @@ const fallbackPosts: BlogPost[] = [
 ];
 
 export default function BlogSection() {
-  const [mountedTheme, setMountedTheme] = useState(false);
-  const { resolvedTheme } = useTheme();
-
-  useEffect(() => setMountedTheme(true), []);
+  const { language } = useLanguage();
 
   
   const [posts, setPosts] = useState<BlogPost[]>(fallbackPosts);
@@ -92,9 +89,11 @@ export default function BlogSection() {
       <Container>
         <div className="text-center mb-5">
           <p className="text-primary fw-semibold text-uppercase small mb-2">Blog</p>
-          <h2 className="fw-bold fs-2 mb-3">Writing Notes</h2>
+          <h2 className="fw-bold fs-2 mb-3">{language === "id" ? "Catatan Tulisan" : "Writing Notes"}</h2>
           <p className={`mx-auto mb-0 `} style={{ maxWidth: 680 }}>
-            Short notes about frontend development, workflow, and design lessons from building real projects.
+            {language === "id"
+              ? "Catatan singkat tentang pengembangan frontend, alur kerja, dan pelajaran desain dari membangun proyek nyata."
+              : "Short notes about frontend development, workflow, and design lessons from building real projects."}
           </p>
         </div>
 

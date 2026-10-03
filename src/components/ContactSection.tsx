@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Container, Button, Form, Spinner } from "react-bootstrap";
 import { readJsonResponse } from "@/lib/readJsonResponse";
 import { useTheme } from "next-themes";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export default function ContactSection() {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "fallback" | "error">("idle");
@@ -12,10 +13,8 @@ export default function ContactSection() {
   const [fallbackMailto, setFallbackMailto] = useState("");
   const isSending = status === "sending";
 
-  const [mounted, setMounted] = useState(false);
   const { resolvedTheme } = useTheme();
-
-  useEffect(() => setMounted(true), []);
+  const { language } = useLanguage();
 
   const buildMailto = (name: string, email: string, message: string) => {
     const subject = encodeURIComponent(`Portfolio inquiry from ${name}`);
@@ -51,21 +50,21 @@ export default function ContactSection() {
 
       if (payload?.code === "CONTACT_NOT_CONFIGURED") {
         setStatus("fallback");
-        setFeedback("Direct sending is not active yet. You can continue by opening your email app.");
+        setFeedback(language === "id" ? "Pengiriman langsung belum aktif. Kamu dapat melanjutkan melalui aplikasi email." : "Direct sending is not active yet. You can continue by opening your email app.");
         return;
       }
 
       if (!response.ok) {
-        throw new Error(payload?.message || "Message could not be sent.");
+        throw new Error(payload?.message || (language === "id" ? "Pesan tidak dapat dikirim." : "Message could not be sent."));
       }
 
       setStatus("success");
-      setFeedback("Message sent. Thank you for reaching out.");
+      setFeedback(language === "id" ? "Pesan berhasil dikirim. Terima kasih telah menghubungi saya." : "Message sent. Thank you for reaching out.");
       form.reset();
       setFallbackMailto("");
     } catch (error) {
       setStatus("error");
-      setFeedback(error instanceof Error ? error.message : "Message could not be sent.");
+      setFeedback(error instanceof Error ? error.message : (language === "id" ? "Pesan tidak dapat dikirim." : "Message could not be sent."));
     }
   };
 
@@ -79,8 +78,8 @@ export default function ContactSection() {
       viewport={{ once: true }}
     >
       <Container style={{ maxWidth: "600px" }}>
-        <h2 className="fw-bold mb-3 text-gradient-primary fs-2">Hire Me</h2>
-        <p className={`fs-6 `}>Send a message below if you are interested in working together.</p>
+        <h2 className="fw-bold mb-3 text-gradient-primary fs-2">{language === "id" ? "Hubungi Saya" : "Hire Me"}</h2>
+        <p className={`fs-6 `}>{language === "id" ? "Kirim pesan melalui formulir berikut jika kamu tertarik untuk bekerja sama." : "Send a message below if you are interested in working together."}</p>
 
         <Form 
           className={`text-start mt-4 p-4 rounded-4 `} 
@@ -105,7 +104,7 @@ export default function ContactSection() {
               {fallbackMailto && (
                 <div className="mt-3">
                   <a href={fallbackMailto} className="btn btn-sm btn-primary rounded-pill fw-semibold px-3">
-                    Open email app to send
+                    {language === "id" ? "Buka aplikasi email" : "Open email app to send"}
                   </a>
                 </div>
               )}
@@ -113,23 +112,23 @@ export default function ContactSection() {
           )}
 
           <Form.Group className="mb-3">
-            <Form.Label className="fw-semibold">Name</Form.Label>
-            <Form.Control name="name" type="text" placeholder="Enter your name" minLength={2} disabled={isSending} required className="custom-input" />
+            <Form.Label className="fw-semibold">{language === "id" ? "Nama" : "Name"}</Form.Label>
+            <Form.Control name="name" type="text" placeholder={language === "id" ? "Masukkan nama kamu" : "Enter your name"} minLength={2} disabled={isSending} required className="custom-input" />
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label className="fw-semibold">Email</Form.Label>
-            <Form.Control name="email" type="email" placeholder="Enter your email" disabled={isSending} required className="custom-input" />
+            <Form.Control name="email" type="email" placeholder={language === "id" ? "Masukkan email kamu" : "Enter your email"} disabled={isSending} required className="custom-input" />
           </Form.Group>
 
           <Form.Group className="mb-4">
-            <Form.Label className="fw-semibold">Message</Form.Label>
-            <Form.Control name="message" as="textarea" rows={4} placeholder="Write your message..." minLength={10} maxLength={3000} disabled={isSending} required className="custom-input" />
+            <Form.Label className="fw-semibold">{language === "id" ? "Pesan" : "Message"}</Form.Label>
+            <Form.Control name="message" as="textarea" rows={4} placeholder={language === "id" ? "Tulis pesan kamu..." : "Write your message..."} minLength={10} maxLength={3000} disabled={isSending} required className="custom-input" />
           </Form.Group>
 
           <Button variant="primary" type="submit" className="w-100 rounded-pill fw-semibold d-inline-flex align-items-center justify-content-center gap-2 py-2" disabled={isSending}>
             {isSending && <Spinner size="sm" animation="border" role="status" />}
-            {isSending ? "Sending..." : "Send Message"}
+            {isSending ? (language === "id" ? "Mengirim..." : "Sending...") : (language === "id" ? "Kirim Pesan" : "Send Message")}
           </Button>
         </Form>
       </Container>

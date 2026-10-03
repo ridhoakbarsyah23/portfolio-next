@@ -2,11 +2,12 @@
 
 import { Container } from "react-bootstrap";
 import { motion } from "framer-motion";
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 import { experienceTimeline } from "@/data/experience";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export default function ExperienceSection() {
+  const { language } = useLanguage();
+
   return (
     <section id="experience" className="py-5" style={{ overflow: "hidden" }}>
       <Container>
@@ -24,7 +25,7 @@ export default function ExperienceSection() {
             letterSpacing: "1px",
           }}
         >
-          Experience
+          {language === "id" ? "Pengalaman" : "Experience"}
         </motion.h2>
 
         <div
@@ -70,10 +71,10 @@ export default function ExperienceSection() {
                 >
                   <h5 className="fw-bold mb-1">{item.title}</h5>
                   <p className="text-primary fw-semibold mb-0">{item.company}</p>
-                  <small className="opacity-75">{item.year}</small>
+                  <small className="opacity-75">{language === "id" ? item.year : item.yearEn}</small>
 
                   <ul className="list-unstyled mt-3 mb-0">
-                    {item.desc.map((d) => (
+                    {(language === "id" ? item.desc : item.descEn).map((d) => (
                       <li key={d} className="d-flex" style={{ marginBottom: "6px" }}>
                         <span className={`me-2 fw-bold ${marker === "OK" ? "text-success" : "text-primary"}`} style={{ fontSize: "1rem" }}>
                           {marker}

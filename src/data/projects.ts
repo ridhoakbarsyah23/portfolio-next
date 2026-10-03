@@ -1,134 +1,327 @@
-export interface ProjectItem {
-  id: string;
+import type { Language } from "@/components/LanguageProvider";
+
+export interface ProjectContent {
   title: string;
   category: string;
-  tags: string[];
   role: string;
-  problem: string;
-  impact: string;
+  organization: string;
+  period: string;
+  location?: string;
   desc: string;
-  image: string;
   overview: string;
-  responsibilities: string[];
-  features: string[];
-  outcomes: string[];
+  contributions: string[];
+  scope: string[];
+}
+
+export interface ProjectItem {
+  id: string;
+  tags: string[];
+  image?: string;
+  content: Record<Language, ProjectContent>;
 }
 
 export const projects: ProjectItem[] = [
   {
-    id: "ods-mandiri-kementerian-koperasi",
-    title: "Online Data System (ODS) Mandiri Kementerian Koperasi RI",
-    category: "Government",
-    tags: ["Next.js", "API", "Government"],
-    role: "Frontend Developer / Technical Support",
-    problem: "Cooperatives and regional offices need a clearer way to record, update, and monitor institutional data.",
-    impact: "Improved data entry flow, reporting visibility, and access to cooperative information for administrative users.",
-    desc: "A digital cooperative data platform for independent reporting, profile updates, and institutional data management.",
-    image: "/projects/ods.png",
-    overview:
-      "ODS Mandiri supports cooperative data management by giving cooperatives and supervising offices a more structured way to submit, update, and review institutional information. The interface focuses on reducing friction in administrative workflows while keeping data access clear for different user needs.",
-    responsibilities: [
-      "Supported frontend development for cooperative data workflows and user-facing administrative screens.",
-      "Helped align interface behavior with reporting, profile update, and monitoring requirements.",
-      "Worked with API-driven data flows to present cooperative information in a clearer format.",
-    ],
-    features: [
-      "Cooperative profile and institutional data management",
-      "Independent data submission and update flow",
-      "Administrative monitoring and reporting-oriented interface",
-    ],
-    outcomes: [
-      "Made routine data entry and review flows easier to follow.",
-      "Improved visibility for cooperative data used by administrative users.",
-      "Supported a more consistent digital workflow for cooperative reporting.",
-    ],
+    id: "pos-point-of-sale",
+    tags: ["POS", "Sales", "Inventory", "Reporting"],
+    content: {
+      id: {
+        title: "POS (Point of Sale)",
+        category: "Sistem Bisnis",
+        role: "Programmer",
+        organization: "Freelance",
+        period: "Desember 2025 - Saat ini",
+        location: "Cilacap & Purwokerto, Jawa Tengah",
+        desc: "Sistem terintegrasi untuk mengelola transaksi penjualan, pembayaran, inventori, dan pelaporan.",
+        overview: "Proyek freelance yang dikembangkan untuk membantu UMKM menjalankan proses penjualan dan operasional utama melalui satu sistem POS.",
+        contributions: ["Mengembangkan aplikasi POS untuk UMKM."],
+        scope: ["Transaksi penjualan", "Pembayaran", "Inventori", "Pelaporan terintegrasi"],
+      },
+      en: {
+        title: "POS (Point of Sale)",
+        category: "Business System",
+        role: "Programmer",
+        organization: "Freelance",
+        period: "December 2025 - Present",
+        location: "Cilacap & Purwokerto, Central Java",
+        desc: "An integrated system for managing sales transactions, payments, inventory, and reporting.",
+        overview: "A freelance project developed to help small and medium businesses manage their core sales and operational processes through one POS system.",
+        contributions: ["Developing a POS application for small and medium businesses."],
+        scope: ["Sales transactions", "Payments", "Inventory", "Integrated reporting"],
+      },
+    },
+  },
+  {
+    id: "ai-agent-customer-service",
+    tags: ["AI Agent", "WhatsApp", "Customer Service", "Automation"],
+    content: {
+      id: {
+        title: "AI Agent Customer Service",
+        category: "Kecerdasan Buatan",
+        role: "Programmer",
+        organization: "Freelance",
+        period: "Desember 2025 - Saat ini",
+        location: "Cilacap & Purwokerto, Jawa Tengah",
+        desc: "Sistem AI Customer Service yang mengotomatisasi interaksi pelanggan melalui WhatsApp.",
+        overview: "AI Agent ini dirancang untuk membantu proses layanan pelanggan melalui WhatsApp, dari penanganan pertanyaan hingga kebutuhan transaksi dan pengiriman.",
+        contributions: ["Mengembangkan aplikasi AI Agent untuk customer service."],
+        scope: ["Pemrosesan pertanyaan pelanggan", "Informasi produk", "Pemesanan dan pembayaran", "Estimasi serta biaya pengiriman"],
+      },
+      en: {
+        title: "AI Agent Customer Service",
+        category: "Artificial Intelligence",
+        role: "Programmer",
+        organization: "Freelance",
+        period: "December 2025 - Present",
+        location: "Cilacap & Purwokerto, Central Java",
+        desc: "An AI customer service system that automates customer interactions through WhatsApp.",
+        overview: "This AI Agent supports customer service processes through WhatsApp, from handling questions to transaction and shipping needs.",
+        contributions: ["Developing an AI Agent application for customer service."],
+        scope: ["Customer question processing", "Product information", "Ordering and payments", "Shipping estimates and costs"],
+      },
+    },
   },
   {
     id: "simrs",
-    title: "SIMRS",
-    category: "Healthcare",
-    tags: ["Laravel", "API", "Hospital"],
-    role: "Programmer",
-    problem: "Hospital teams need stable modules that support daily service, administration, and patient-related workflows.",
-    impact: "Handled bug fixing, feature updates, and testing to keep hospital operations more reliable.",
-    desc: "A hospital management information system built to support online operational workflows across healthcare services.",
+    tags: ["SIMRS", "Healthcare", "Integrated System"],
     image: "/projects/simrs.jpg",
-    overview:
-      "SIMRS is a hospital management information system used to support operational workflows in healthcare environments. The work focused on maintaining reliability, improving existing modules, and helping the system respond to user needs from implementation and operational teams.",
-    responsibilities: [
-      "Fixed bugs in existing SIMRS modules and verified affected workflows after changes.",
-      "Developed feature updates based on user and implementation team requirements.",
-      "Supported testing and debugging to keep hospital service workflows stable.",
-    ],
-    features: [
-      "Hospital administration workflow support",
-      "Patient-related operational modules",
-      "API-connected feature updates and maintenance",
-    ],
-    outcomes: [
-      "Reduced friction caused by module issues and workflow bugs.",
-      "Helped keep daily hospital operations more dependable.",
-      "Improved response to user requirements through targeted feature updates.",
-    ],
+    content: {
+      id: {
+        title: "SIMRS",
+        category: "Kesehatan",
+        role: "Programmer",
+        organization: "PT Data Kreatif",
+        period: "Agustus 2025 - November 2025",
+        location: "Cileungsi, Bogor",
+        desc: "Sistem terintegrasi untuk mendukung operasional rumah sakit secara daring.",
+        overview: "Sistem Informasi Manajemen Rumah Sakit mendukung alur operasional dari pendaftaran pasien dan pelayanan medis hingga rekam medis dan laporan administrasi.",
+        contributions: [
+          "Mengembangkan dan memelihara fitur untuk mendukung operasional rumah sakit.",
+          "Mengidentifikasi dan memperbaiki bug untuk meningkatkan stabilitas dan keandalan sistem.",
+          "Berkoordinasi dengan tim implementor dan pengguna rumah sakit untuk menerjemahkan kebutuhan menjadi solusi teknis.",
+          "Melakukan testing, debugging, serta penyesuaian fitur berdasarkan feedback pengguna.",
+        ],
+        scope: ["Pendaftaran pasien", "Pelayanan medis", "Manajemen rekam medis", "Laporan administrasi"],
+      },
+      en: {
+        title: "SIMRS",
+        category: "Healthcare",
+        role: "Programmer",
+        organization: "PT Data Kreatif",
+        period: "August 2025 - November 2025",
+        location: "Cileungsi, Bogor",
+        desc: "An integrated system supporting online hospital operations.",
+        overview: "The Hospital Management Information System supports operational workflows from patient registration and medical services to medical records and administrative reporting.",
+        contributions: [
+          "Developed and maintained features supporting hospital operations.",
+          "Identified and fixed bugs to improve system stability and reliability.",
+          "Coordinated with implementation teams and hospital users to translate requirements into technical solutions.",
+          "Performed testing, debugging, and feature adjustments based on user feedback.",
+        ],
+        scope: ["Patient registration", "Medical services", "Medical record management", "Administrative reporting"],
+      },
+    },
   },
   {
     id: "emr",
-    title: "EMR",
-    category: "Medical Records",
-    tags: ["Laravel", "UI/UX", "Data"],
-    role: "Programmer / UI Support",
-    problem: "Medical staff need structured digital records that are easier to access, update, and review.",
-    impact: "Supported patient record digitization with clearer interfaces and data management flows.",
-    desc: "An electronic medical record system for managing patient history, clinical notes, and digital medical data.",
+    tags: ["EMR", "Healthcare", "Medical Records"],
     image: "/projects/emr.jpg",
-    overview:
-      "The EMR project focuses on managing patient medical information in a digital format. The goal is to support medical record workflows with clearer data structures, easier review, and interfaces that help staff work with patient history more efficiently.",
-    responsibilities: [
-      "Supported development and maintenance of electronic medical record workflows.",
-      "Helped improve interface clarity for patient data review and update flows.",
-      "Worked with structured data requirements for medical record management.",
-    ],
-    features: [
-      "Patient medical history management",
-      "Clinical note and record update workflows",
-      "Structured digital medical data interface",
-    ],
-    outcomes: [
-      "Supported the shift from manual records toward clearer digital data management.",
-      "Made patient information easier to review through structured interfaces.",
-      "Helped improve consistency in medical record workflows.",
-    ],
+    content: {
+      id: {
+        title: "EMR",
+        category: "Rekam Medis",
+        role: "Programmer",
+        organization: "PT Data Kreatif",
+        period: "Agustus 2025 - November 2025",
+        location: "Cileungsi, Bogor",
+        desc: "Sistem rekam medis elektronik yang digunakan untuk mendukung operasional rumah sakit.",
+        overview: "EMR merupakan salah satu sistem yang dikembangkan dan dipelihara selama bekerja di PT Data Kreatif untuk mendukung kebutuhan operasional rumah sakit.",
+        contributions: [
+          "Mengembangkan dan memelihara fitur pada sistem EMR.",
+          "Memperbaiki bug serta melakukan testing dan debugging.",
+          "Menyesuaikan fitur berdasarkan kebutuhan operasional dan feedback pengguna.",
+        ],
+        scope: ["Rekam medis elektronik", "Pemeliharaan fitur", "Perbaikan bug", "Testing dan debugging"],
+      },
+      en: {
+        title: "EMR",
+        category: "Medical Records",
+        role: "Programmer",
+        organization: "PT Data Kreatif",
+        period: "August 2025 - November 2025",
+        location: "Cileungsi, Bogor",
+        desc: "An electronic medical record system used to support hospital operations.",
+        overview: "EMR was one of the systems developed and maintained while working at PT Data Kreatif to support hospital operational needs.",
+        contributions: [
+          "Developed and maintained features in the EMR system.",
+          "Fixed bugs and performed testing and debugging.",
+          "Adjusted features based on operational needs and user feedback.",
+        ],
+        scope: ["Electronic medical records", "Feature maintenance", "Bug fixing", "Testing and debugging"],
+      },
+    },
+  },
+  {
+    id: "dieng-run-event",
+    tags: ["Responsive Web App", "Registration", "Payment", "Event"],
+    content: {
+      id: {
+        title: "Dieng Run Event",
+        category: "Platform Event",
+        role: "Programmer",
+        organization: "Freelance",
+        period: "Januari 2025 - Juli 2025",
+        location: "Cilacap, Jawa Tengah",
+        desc: "Responsive web app untuk mendukung pengelolaan dan pendaftaran event lari di kawasan Dieng.",
+        overview: "Aplikasi ini membantu peserta menjalani proses pendaftaran event serta memperoleh informasi yang dibutuhkan terkait Dieng Run.",
+        contributions: ["Mengembangkan dan merancang aplikasi Dieng Run Event."],
+        scope: ["Registrasi peserta", "Pengelolaan data pendaftaran", "Pembayaran", "Informasi event"],
+      },
+      en: {
+        title: "Dieng Run Event",
+        category: "Event Platform",
+        role: "Programmer",
+        organization: "Freelance",
+        period: "January 2025 - July 2025",
+        location: "Cilacap, Central Java",
+        desc: "A responsive web app supporting the management and registration of a running event in Dieng.",
+        overview: "The application helps participants complete event registration and access relevant information about Dieng Run.",
+        contributions: ["Developed and designed the Dieng Run Event application."],
+        scope: ["Participant registration", "Registration data management", "Payments", "Event information"],
+      },
+    },
   },
   {
     id: "sisappra-satpol-pp-dki-jakarta",
-    title: "SISAPPRA Satpol PP DKI Jakarta",
-    category: "Government",
-    tags: ["Dashboard", "Reporting", "Monitoring"],
-    role: "Frontend Developer",
-    problem: "Operational activities need to be easier to monitor, report, and review across field and administrative teams.",
-    impact: "Built interface improvements for reporting, monitoring, and dashboard-based operational visibility.",
-    desc: "A monitoring and reporting platform for Satpol PP DKI Jakarta operational activities and performance tracking.",
+    tags: ["SISAPPRA 2.0", "Government", "Monitoring"],
     image: "/projects/sisappra.png",
-    overview:
-      "SISAPPRA supports monitoring and reporting for Satpol PP DKI Jakarta operational activities. The project emphasizes dashboard clarity, activity reporting, and interface improvements that help users understand operational information faster.",
-    responsibilities: [
-      "Developed frontend interfaces for operational monitoring and reporting needs.",
-      "Improved UI structure for dashboard and activity review workflows.",
-      "Supported feature enhancement for the Satpol PP web platform.",
-    ],
-    features: [
-      "Operational activity reporting",
-      "Dashboard-based monitoring",
-      "Administrative review and visibility tools",
-    ],
-    outcomes: [
-      "Improved how operational activity information is presented to users.",
-      "Made reporting and monitoring workflows easier to scan and review.",
-      "Supported clearer visibility for government operational activities.",
-    ],
+    content: {
+      id: {
+        title: "SISAPPRA Satpol PP DKI Jakarta",
+        category: "Pemerintahan",
+        role: "Frontend Developer",
+        organization: "PT Tristar Surya Gemilang",
+        period: "Januari 2023 - Januari 2024",
+        location: "Purwokerto, Jawa Tengah",
+        desc: "Sistem informasi untuk mengelola dan memantau aspek penegakan peraturan daerah, keamanan, dan ketertiban.",
+        overview: "SISAPPRA versi 2.0 digunakan oleh Satpol PP Provinsi DKI Jakarta untuk mendukung pengelolaan dan pemantauan aktivitas terkait tugas instansi.",
+        contributions: ["Mengembangkan fitur pada SISAPPRA versi 2.0 Satpol PP DKI Jakarta."],
+        scope: ["Pengelolaan informasi", "Pemantauan penegakan peraturan daerah", "Tugas keamanan", "Ketertiban wilayah"],
+      },
+      en: {
+        title: "SISAPPRA Satpol PP DKI Jakarta",
+        category: "Government",
+        role: "Frontend Developer",
+        organization: "PT Tristar Surya Gemilang",
+        period: "January 2023 - January 2024",
+        location: "Purwokerto, Central Java",
+        desc: "An information system for managing and monitoring regional regulation enforcement, security, and public order.",
+        overview: "SISAPPRA 2.0 is used by Satpol PP DKI Jakarta to support the management and monitoring of activities related to the agency's responsibilities.",
+        contributions: ["Developed features for SISAPPRA 2.0 for Satpol PP DKI Jakarta."],
+        scope: ["Information management", "Regional regulation enforcement monitoring", "Security duties", "Regional public order"],
+      },
+    },
+  },
+  {
+    id: "new-lms-bank-bjb",
+    tags: ["LMS", "Banking", "Small Business"],
+    content: {
+      id: {
+        title: "New LMS Bank BJB",
+        category: "Perbankan",
+        role: "Frontend Developer",
+        organization: "PT Tristar Surya Gemilang",
+        period: "Januari 2023 - Januari 2024",
+        location: "Purwokerto, Jawa Tengah",
+        desc: "Loan Management System Bank BJB untuk segmen UMKM dan nasabah Bank BJB.",
+        overview: "New LMS merupakan sistem pengelolaan pinjaman yang ditujukan untuk mendukung layanan Bank BJB pada segmen UMKM.",
+        contributions: ["Mengembangkan fitur pada New LMS Bank BJB untuk segmen UMKM."],
+        scope: ["Loan Management System", "Segmen UMKM", "Layanan untuk nasabah Bank BJB"],
+      },
+      en: {
+        title: "New LMS Bank BJB",
+        category: "Banking",
+        role: "Frontend Developer",
+        organization: "PT Tristar Surya Gemilang",
+        period: "January 2023 - January 2024",
+        location: "Purwokerto, Central Java",
+        desc: "Bank BJB's Loan Management System for the small-business segment and Bank BJB customers.",
+        overview: "New LMS is a loan management system designed to support Bank BJB services for the small-business segment.",
+        contributions: ["Developed features for Bank BJB's New LMS for the small-business segment."],
+        scope: ["Loan Management System", "Small-business segment", "Services for Bank BJB customers"],
+      },
+    },
+  },
+  {
+    id: "website-satpol-pp-dki-jakarta",
+    tags: ["Government", "Public Service", "Web Application"],
+    content: {
+      id: {
+        title: "Website Satpol PP DKI Jakarta",
+        category: "Pelayanan Publik",
+        role: "Developer",
+        organization: "Tidak dicantumkan di CV",
+        period: "Tidak dicantumkan di CV",
+        desc: "Sistem informasi pengaduan masyarakat berbasis web untuk Satpol PP DKI Jakarta.",
+        overview: "Website ini digunakan masyarakat untuk menyampaikan pengaduan maupun permohonan yang berkaitan dengan Satpol PP DKI Jakarta.",
+        contributions: ["Mengembangkan sistem informasi pengaduan masyarakat berbasis website."],
+        scope: ["Pengaduan masyarakat", "Permohonan masyarakat", "Layanan terkait Satpol PP DKI Jakarta"],
+      },
+      en: {
+        title: "Satpol PP DKI Jakarta Website",
+        category: "Public Service",
+        role: "Developer",
+        organization: "Not specified in the CV",
+        period: "Not specified in the CV",
+        desc: "A web-based public complaint information system for Satpol PP DKI Jakarta.",
+        overview: "The website allows members of the public to submit complaints and requests related to Satpol PP DKI Jakarta.",
+        contributions: ["Developed a web-based public complaint information system."],
+        scope: ["Public complaints", "Public requests", "Services related to Satpol PP DKI Jakarta"],
+      },
+    },
+  },
+  {
+    id: "sistem-keuangan-laraduit",
+    tags: ["Laravel", "Tabler.io", "Finance", "UI Redesign"],
+    content: {
+      id: {
+        title: "Sistem Keuangan Laraduit",
+        category: "Sistem Keuangan",
+        role: "Frontend Developer Intern",
+        organization: "CV Bahira Studio",
+        period: "Juli 2021 - September 2021",
+        location: "Purwokerto, Jawa Tengah",
+        desc: "Sistem keuangan perusahaan berbasis web yang dibangun dengan Laravel dan Tabler.io.",
+        overview: "Laraduit digunakan untuk mencatat keuangan perusahaan. Pekerjaan pada proyek ini berfokus pada perancangan ulang antarmuka agar tampilannya lebih terstruktur dan sesuai kebutuhan sistem.",
+        contributions: [
+          "Merancang ulang antarmuka pengguna sistem keuangan Laraduit.",
+          "Mengembangkan tampilan yang lebih terstruktur dan sesuai dengan kebutuhan sistem.",
+        ],
+        scope: ["Pencatatan keuangan perusahaan", "Perancangan ulang UI", "Laravel", "Tabler.io"],
+      },
+      en: {
+        title: "Laraduit Financial System",
+        category: "Financial System",
+        role: "Frontend Developer Intern",
+        organization: "CV Bahira Studio",
+        period: "July 2021 - September 2021",
+        location: "Purwokerto, Central Java",
+        desc: "A web-based company financial system built with Laravel and Tabler.io.",
+        overview: "Laraduit is used to record company finances. Work on this project focused on redesigning the interface to make it more structured and aligned with system requirements.",
+        contributions: [
+          "Redesigned the user interface of the Laraduit financial system.",
+          "Developed a more structured interface aligned with system requirements.",
+        ],
+        scope: ["Company financial records", "UI redesign", "Laravel", "Tabler.io"],
+      },
+    },
   },
 ];
 
 export function getProjectById(id: string) {
   return projects.find((project) => project.id === id);
+}
+
+export function getProjectContent(project: ProjectItem, language: Language) {
+  return project.content[language];
 }

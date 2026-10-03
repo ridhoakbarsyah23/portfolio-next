@@ -5,6 +5,7 @@ import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import { Spinner } from "react-bootstrap";
+import { useLanguage } from "@/components/LanguageProvider";
 
 // Configure worker for PDF.js (using Unpkg CDN for zero-config reliability in Next.js)
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -14,6 +15,7 @@ interface PDFViewerProps {
 }
 
 export default function PDFViewer({ url }: PDFViewerProps) {
+  const { language } = useLanguage();
   const [numPages, setNumPages] = useState<number>(0);
   const [containerWidth, setContainerWidth] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -46,12 +48,12 @@ export default function PDFViewer({ url }: PDFViewerProps) {
         loading={
           <div className="py-5 text-center text-secondary w-100 d-flex flex-column align-items-center justify-content-center">
             <Spinner animation="border" variant="primary" className="mb-3" />
-            <p>Mempersiapkan Dokumen...</p>
+            <p>{language === "id" ? "Mempersiapkan dokumen..." : "Preparing document..."}</p>
           </div>
         }
         error={
           <div className="p-5 text-center text-danger">
-            Gagal memuat PDF. Silakan gunakan tombol Download di bawah.
+            {language === "id" ? "Gagal memuat PDF. Silakan gunakan tombol unduh di bawah." : "Could not load the PDF. Please use the download button below."}
           </div>
         }
       >

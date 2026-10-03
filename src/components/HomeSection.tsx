@@ -136,22 +136,86 @@ export default function HomeSection() {
       </Container>
 
       {/* CV Modal */}
-      <Modal show={showCV} onHide={() => setShowCV(false)} size="lg" centered>
-        <Modal.Header closeButton style={{ background: "var(--color-card)", color: "var(--color-card-foreground)", borderBottom: "1px solid var(--color-border)" }}>
-          <Modal.Title>Curriculum Vitae</Modal.Title>
+      <Modal show={showCV} onHide={() => setShowCV(false)} size="lg" centered contentClassName="modern-modal-content">
+        <Modal.Header closeButton className="modern-modal-header">
+          <Modal.Title className="modern-modal-title">Curriculum Vitae</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="p-0" style={{ background: "var(--color-card)" }}>
+        <Modal.Body className="p-0 position-relative" style={{ minHeight: "50vh", background: "var(--color-card)" }}>
           <PDFViewer url="/CV_Ridho_Akbarsyah_Ramadhan.pdf" />
         </Modal.Body>
-        <Modal.Footer style={{ background: "var(--color-card)", borderTop: "1px solid var(--color-border)" }}>
-          <Button variant="secondary" onClick={() => setShowCV(false)}>
+        <Modal.Footer className="modern-modal-footer d-flex justify-content-between align-items-center">
+          <span className="text-muted small" style={{ fontWeight: 500, opacity: 0.7 }}>
+            {language === "id" ? "Terbaru" : "Latest"}
+          </span>
+          <div className="d-flex gap-2">
+            <Button variant="secondary" onClick={() => setShowCV(false)} className="modern-btn-secondary">
             {language === "id" ? "Tutup" : "Close"}
           </Button>
-          <a href="/CV_Ridho_Akbarsyah_Ramadhan.pdf" download className="btn btn-primary d-flex align-items-center gap-2">
-            <FaDownload /> {language === "id" ? "Unduh File" : "Download File"}
+          <a href="/CV_Ridho_Akbarsyah_Ramadhan.pdf" download className="btn btn-primary modern-btn-primary d-flex align-items-center gap-2">
+            <FaDownload /> {language === "id" ? "Unduh CV" : "Download CV"}
           </a>
-        </Modal.Footer>
-      </Modal>
+        </div>
+      </Modal.Footer>
+    </Modal>
+
+      <style>{`
+        .modern-modal-content {
+          background: var(--color-card) !important;
+          border-radius: 24px !important;
+          border: 1px solid var(--color-border) !important;
+          box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.4) !important;
+          overflow: hidden;
+        }
+        
+        .modern-modal-header {
+          border-bottom: 1px solid var(--color-border) !important;
+          padding: 1.5rem 1.75rem !important;
+          background: var(--color-card) !important;
+        }
+        
+        .modern-modal-title {
+          font-weight: 700;
+          font-size: 1.35rem;
+          letter-spacing: -0.02em;
+          color: var(--color-foreground);
+        }
+
+        .modern-modal-footer {
+          border-top: 1px solid var(--color-border) !important;
+          padding: 1.25rem 1.75rem !important;
+          background: var(--color-background) !important;
+        }
+
+        .modern-btn-primary {
+          background: linear-gradient(135deg, var(--color-primary) 0%, #2563eb 100%) !important;
+          border: none !important;
+          border-radius: 12px !important;
+          padding: 0.6rem 1.5rem !important;
+          font-weight: 600 !important;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+          color: #ffffff !important;
+        }
+
+        .modern-btn-primary:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35) !important;
+          filter: brightness(1.1);
+        }
+
+        .modern-btn-secondary {
+          border-radius: 12px !important;
+          padding: 0.6rem 1.5rem !important;
+          font-weight: 600 !important;
+          background: transparent !important;
+          border: 1px solid var(--color-border) !important;
+          color: var(--color-foreground) !important;
+          transition: all 0.2s ease !important;
+        }
+
+        .modern-btn-secondary:hover {
+          background: var(--color-muted) !important;
+        }
+      `}</style>
     </section>
   );
 }

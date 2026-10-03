@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { LanguageProvider } from "@/components/LanguageProvider";
 import { Archivo, Space_Grotesk } from "next/font/google";
 
 const archivo = Archivo({
@@ -66,10 +67,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="id" suppressHydrationWarning>
       <body className={`${spaceGrotesk.className} ${archivo.variable} ${spaceGrotesk.variable}`}>
         <ThemeProvider attribute="data-bs-theme" defaultTheme="system" enableSystem disableTransitionOnChange>
-          {children}
+          <LanguageProvider>{children}</LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

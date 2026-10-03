@@ -1,18 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Container, Navbar, Nav, Button } from "react-bootstrap";
-import { FaMoon, FaSun, FaGithub, FaLinkedin } from "react-icons/fa";
+import { Container, Navbar, Nav } from "react-bootstrap";
+import { FaMoon, FaSun } from "react-icons/fa";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { useTheme } from "next-themes";
-import Link from "next/link";
+import { useLanguage } from "@/components/LanguageProvider";
+import LanguageFlag from "@/components/LanguageFlag";
 
 export default function NavbarComponent() {
   const [expanded, setExpanded] = useState(false);
   const [activeLink, setActiveLink] = useState("home");
   const [mounted, setMounted] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
+  const { language, setLanguage } = useLanguage();
 
   // Scroll progress for the progress bar
   const { scrollYProgress } = useScroll();
@@ -22,14 +24,17 @@ export default function NavbarComponent() {
     restDelta: 0.001
   });
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => setMounted(true));
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) setIsScrolled(true);
       else setIsScrolled(false);
 
-      const sections = ["home", "about", "experience", "skills", "projects", "blog", "contact"];
+      const sections = ["home", "about", "experience", "skills", "projects", "certificates", "blog", "contact"];
       const scrollY = window.scrollY + 150;
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = document.getElementById(sections[i]);
@@ -45,9 +50,15 @@ export default function NavbarComponent() {
 
   const isDarkMode = mounted ? resolvedTheme === "dark" : true;
 
-  const mainLinks = ["home", "about", "experience", "skills", "projects", "blog"];
-
-  const formatLabel = (id: string) => id.charAt(0).toUpperCase() + id.slice(1);
+  const mainLinks = ["about", "experience", "projects", "blog", "contact"];
+  const labels: Record<string, Record<typeof language, string>> = {
+    home: { id: "Beranda", en: "Home" },
+    about: { id: "Tentang", en: "About" },
+    experience: { id: "Pengalaman", en: "Experience" },
+    projects: { id: "Proyek", en: "Projects" },
+    blog: { id: "Blog", en: "Blog" },
+    contact: { id: "Kontak", en: "Contact" },
+  };
   const closeMenu = () => setExpanded(false);
 
   return (
@@ -64,15 +75,14 @@ export default function NavbarComponent() {
       }}
     >
       <Container>
-        <Navbar.Brand href="#home" onClick={closeMenu} className="fw-bold d-flex align-items-baseline gap-2" aria-label="Ridho Akbarsyah portfolio home">
-          <span style={{ color: "var(--color-foreground)", fontSize: "1.5rem" }}>Ridho<span className="text-primary">.</span></span>
-          <span className="d-none d-sm-inline-block" style={{ fontSize: "0.85rem", fontWeight: 500, color: "var(--color-secondary)" }}>Frontend Dev</span>
+        <Navbar.Brand href="#home" onClick={closeMenu} className="fw-bold" aria-label={language === "id" ? "Beranda portfolio Ridho Akbarsyah" : "Ridho Akbarsyah portfolio home"}>
+          <span className="navbar-brand-name">Ridho<span className="text-primary">.</span></span>
         </Navbar.Brand>
 
-        <Navbar.Toggle aria-controls="main-navbar" className="border-0 shadow-none" style={{ color: "var(--color-foreground)" }} />
+        <Navbar.Toggle aria-controls="main-navbar" aria-label={language === "id" ? "Buka menu navigasi" : "Open navigation menu"} className="border-0 shadow-none" />
 
         <Navbar.Collapse id="main-navbar">
-          <Nav className="ms-auto align-items-lg-center gap-lg-3 gap-2 mt-3 mt-lg-0">
+          <Nav className="ms-auto align-items-lg-center gap-lg-2 mt-3 mt-lg-0">
             {mainLinks.map((id) => (
               <Nav.Link
                 key={id}
@@ -85,41 +95,32 @@ export default function NavbarComponent() {
                   color: activeLink === id ? "var(--color-primary)" : "var(--color-secondary)"
                 }}
               >
-                {formatLabel(id)}
+                {labels[id][language]}
               </Nav.Link>
             ))}
 
-            <div className="d-flex align-items-center gap-3 ms-lg-3 mt-3 mt-lg-0 pt-3 pt-lg-0 nav-social-divider">
-              <a href="https://github.com/ridhoakbarsyah23" target="_blank" rel="noopener noreferrer" className="nav-icon-link" aria-label="GitHub">
-                <FaGithub size={20} />
-              </a>
-              <a href="https://linkedin.com/in/ridhoakbarsyah" target="_blank" rel="noopener noreferrer" className="nav-icon-link" aria-label="LinkedIn">
-                <FaLinkedin size={20} />
-              </a>
-
-              <Button
-                variant="link"
+            <div className="nav-actions d-flex align-items-center gap-2 ms-lg-2 mt-3 mt-lg-0 pt-3 pt-lg-0">
+              <button
+                type="button"
                 onClick={() => setTheme(isDarkMode ? "light" : "dark")}
-                className="nav-icon-link p-0 text-decoration-none border-0"
-                aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+                className="nav-control"
+                aria-label={isDarkMode
+                  ? (language === "id" ? "Gunakan tema terang" : "Switch to light mode")
+                  : (language === "id" ? "Gunakan tema gelap" : "Switch to dark mode")}
               >
-                {isDarkMode ? <FaSun size={20} /> : <FaMoon size={20} />}
-              </Button>
-            </div>
+                {isDarkMode ? <FaSun size={17} /> : <FaMoon size={17} />}
+              </button>
 
-            <Button
-              as="a"
-              href="#contact"
-              onClick={closeMenu}
-              variant="primary"
-              className="rounded-pill px-4 py-2 ms-lg-3 mt-3 mt-lg-0 fw-semibold shadow-sm d-inline-flex align-items-center justify-content-center gap-2"
-            >
-              <span className="position-relative d-flex align-items-center justify-content-center" style={{ width: "10px", height: "10px" }}>
-                <span className="position-absolute w-100 h-100 rounded-circle bg-success opacity-75 animate-ping"></span>
-                <span className="position-relative rounded-circle bg-success" style={{ width: "8px", height: "8px" }}></span>
-              </span>
-              Hire Me
-            </Button>
+              <button
+                type="button"
+                className="nav-control nav-language-control"
+                onClick={() => setLanguage(language === "id" ? "en" : "id")}
+                aria-label={language === "id" ? "Switch to English" : "Gunakan Bahasa Indonesia"}
+                title={language === "id" ? "Switch to English" : "Gunakan Bahasa Indonesia"}
+              >
+                <LanguageFlag language={language === "id" ? "en" : "id"} />
+              </button>
+            </div>
           </Nav>
         </Navbar.Collapse>
       </Container>
@@ -128,7 +129,7 @@ export default function NavbarComponent() {
       <motion.div
         className="position-absolute bottom-0 start-0 w-100 bg-primary"
         style={{ 
-          height: "3px", 
+          height: "2px",
           scaleX, 
           transformOrigin: "0%",
           zIndex: 10

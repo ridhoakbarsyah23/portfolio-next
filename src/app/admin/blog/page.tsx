@@ -70,6 +70,8 @@ export default function AdminBlogPage() {
   const [activeTab, setActiveTab] = useState<string>("write");
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [postToDelete, setPostToDelete] = useState<BlogPost | null>(null);
   const errorRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
 
@@ -255,15 +257,19 @@ export default function AdminBlogPage() {
     }
   };
 
-  const handleDelete = async (post: BlogPost) => {
-    const confirmed = window.confirm(`Hapus artikel "${post.title}"? Tindakan ini tidak dapat dibatalkan.`);
-    if (!confirmed) return;
+  const handleDeleteClick = (post: BlogPost) => {
+    setPostToDelete(post);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!postToDelete) return;
 
     setError("");
     setMessage("");
 
     try {
-      const response = await fetch(`/api/blog?id=${encodeURIComponent(post.id)}`, {
+      const response = await fetch(`/api/blog?id=${encodeURIComponent(postToDelete.id)}`, {
         method: "DELETE",
         headers,
       });
@@ -276,6 +282,9 @@ export default function AdminBlogPage() {
       setMessage("Artikel berhasil dihapus.");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Gagal menghapus artikel.");
+    } finally {
+      setShowDeleteModal(false);
+      setPostToDelete(null);
     }
   };
 
@@ -420,10 +429,10 @@ export default function AdminBlogPage() {
                       <div className={styles.tableWrap}>
                         <table className={styles.articleTable}>
                           <thead><tr><th>Artikel</th><th>Kategori</th><th>Status</th><th><span className="visually-hidden">Tindakan</span></th></tr></thead>
-                          <tbody>{posts.map((post) => <ArticleRow key={post.id} post={post} onEdit={openForm} onDelete={handleDelete} />)}</tbody>
+                          <tbody>{posts.map((post) => <ArticleRow key={post.id} post={post} onEdit={openForm} onDelete={handleDeleteClick} />)}</tbody>
                         </table>
                       </div>
-                      <div className={styles.mobileList}>{posts.map((post) => <ArticleCard key={post.id} post={post} onEdit={openForm} onDelete={handleDelete} />)}</div>
+                      <div className={styles.mobileList}>{posts.map((post) => <ArticleCard key={post.id} post={post} onEdit={openForm} onDelete={handleDeleteClick} />)}</div>
                     </>
                   )}
                 </section>
@@ -527,6 +536,23 @@ export default function AdminBlogPage() {
           </Button>
           <Button variant="danger" onClick={confirmSignOut}>
             Keluar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered contentClassName={styles.glassModal}>
+        <Modal.Header closeButton closeVariant="white" className={styles.glassModalHeader}>
+          <Modal.Title className={styles.glassModalTitle}>Hapus Artikel</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Apakah Anda yakin ingin menghapus artikel <strong>&quot;{postToDelete?.title}&quot;</strong>? Tindakan ini tidak dapat dibatalkan.
+        </Modal.Body>
+        <Modal.Footer className={styles.glassModalFooter}>
+          <Button variant="outline-light" onClick={() => setShowDeleteModal(false)}>
+            Batal
+          </Button>
+          <Button variant="danger" onClick={confirmDelete}>
+            <FaTrash aria-hidden="true" /> Hapus
           </Button>
         </Modal.Footer>
       </Modal>
